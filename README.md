@@ -6,6 +6,8 @@ Inclui:
 
 Login
 
+Register
+
 Route guardian
 
 Login with email and Facebook
