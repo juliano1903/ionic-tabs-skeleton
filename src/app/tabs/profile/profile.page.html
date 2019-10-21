@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="user$ | async as user" padding class="cards-bg">
+  <div margin class="is-profile-picture">
+    <img src="assets/imgs/profile.png" />
+    <div>
+      <ion-fab slot="fixed">
+        <ion-fab-button fill="outline" size="small">
+          <ion-icon name="camera"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+    </div>
+  </div>
+
+  <div text-center margin-bottom>
+    <h2 no-margin>{{ user.email }}</h2>
+    <p no-margin>{{ user.phoneNumber }}</p>
+  </div>
+
+  <!-- Default Item -->
+  <ion-item>
+    <ion-label>
+      Item
+    </ion-label>
+  </ion-item>
+
+  <!-- Item as a Button -->
+  <ion-item (click)="buttonClick()">
+    <ion-label>
+      Button Item
+    </ion-label>
+  </ion-item>
+
+  <!-- Item as an Anchor -->
+  <ion-item href="https://www.ionicframework.com">
+    <ion-label>
+      Anchor Item
+    </ion-label>
+  </ion-item>
+</ion-content>

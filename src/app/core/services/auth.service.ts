@@ -16,6 +16,12 @@ export class AuthService {
     this.authState$ = this.afAuth.authState;
   }
 
+  currentUserId(): string {
+    const user = this.afAuth.auth.currentUser.uid;
+    console.log(user);
+    return user;
+  }
+
   get isAuthenticated(): Observable<boolean> {
     return this.authState$.pipe(map(user => user !== null));
   }

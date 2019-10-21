@@ -4,9 +4,15 @@ export enum AuthProvider {
 }
 
 export interface User {
-  name?: string;
+  id: string;
+  name: string;
   email: string;
   password: string;
+  addres: string;
+  city: string;
+  state: string;
+  pictureURL: string;
+  register: string;
 }
 
 export interface AuthOptions {
