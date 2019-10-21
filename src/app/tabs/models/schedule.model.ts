@@ -6,5 +6,5 @@ export interface Schedule {
   effectiveEndTime: Date;
   effectiveStartTime: Date;
   notes: string;
-  userId: number;
+  userId: string;
 }

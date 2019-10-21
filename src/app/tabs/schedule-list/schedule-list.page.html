@@ -10,33 +10,25 @@
 </ion-header>
 
 <ion-content *ngIf="schedules$ | async as schedules">
-  <div *ngFor="let item of schedules">
-    <div style="display: inline-block; vertical-align: top">
-      <ion-item lines="none">
-        <ion-avatar>
-          <ion-text color="primary" class="ion-text-center">
-            <div>{{ item.startTime | date: 'dd' }}</div>
-            <div>Mon</div>
-          </ion-text>
-        </ion-avatar>
-      </ion-item>
-    </div>
-    <div style="display: inline-block">
-      <div style="display: table-row-group">
-        <div style="display: table-row">
-          <ion-item (click)="changeApply(item)" style="width: 15em;">
-            <ion-label class="ion-text-wrap">
-              <ion-text color="dark">
-                <h2>{{ item.location }}</h2>
-              </ion-text>
-              <ion-text color="dark">
-                <p>{{ item.startTime | date: 'HH:mm' }} - {{ item.endTime | date: 'HH:mm' }}</p>
-              </ion-text>
-            </ion-label>
-            <ion-icon name="done-all" color="success" size="large" *ngIf="item.userId"></ion-icon>
-          </ion-item>
-        </div>
-      </div>
-    </div>
-  </div>
+  <ion-list>
+    <ion-item (click)="changeApply(item)" *ngFor="let item of schedules">
+      <ion-thumbnail slot="start">
+        <ion-text color="primary" class="ion-text-center">
+          <div style="padding-top: 0.7em;">{{ item.startTime | date: 'dd' }}</div>
+          <div>Mon</div>
+        </ion-text>
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ item.location }}</h2>
+        <p>{{ item.startTime | date: 'HH:mm' }} - {{ item.endTime | date: 'HH:mm' }}</p>
+      </ion-label>
+      <ion-icon
+        name="done-all"
+        slot="end"
+        color="success"
+        size="large"
+        *ngIf="item.userId"
+      ></ion-icon>
+    </ion-item>
+  </ion-list>
 </ion-content>

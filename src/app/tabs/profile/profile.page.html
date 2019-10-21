@@ -4,8 +4,8 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="user$ | async as user" padding class="cards-bg">
-  <div margin class="is-profile-picture">
+<ion-content *ngIf="user$ | async as user">
+  <div text-center margin class="is-profile-picture">
     <img src="assets/imgs/profile.png" />
     <div>
       <ion-fab slot="fixed">
@@ -18,27 +18,59 @@
 
   <div text-center margin-bottom>
     <h2 no-margin>{{ user.name }}</h2>
-    <p no-margin>{{ user.phoneNumber }}</p>
   </div>
 
-  <!-- Default Item -->
-  <ion-item>
-    <ion-label>
-      Item
-    </ion-label>
-  </ion-item>
+  <ion-list>
+    <ion-item button>
+      <ion-avatar slot="start" class="is-icon-avatar is-background-primary">
+        <ion-icon name="notifications"></ion-icon>
+      </ion-avatar>
+      <ion-label>
+        <h2>Notification</h2>
+      </ion-label>
+    </ion-item>
+    <ion-item button>
+      <ion-avatar slot="start" class="is-icon-avatar is-background-secondary">
+        <ion-icon name="people"></ion-icon>
+      </ion-avatar>
+      <ion-label>
+        <h2>Friends</h2>
+      </ion-label>
+    </ion-item>
+    <ion-item button>
+      <ion-avatar slot="start" class="is-icon-avatar is-background-dark">
+        <ion-icon name="camera"></ion-icon>
+      </ion-avatar>
+      <ion-label>
+        <h2>Photos & Camera</h2>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 
-  <!-- Item as a Button -->
-  <ion-item (click)="buttonClick()">
-    <ion-label>
-      Button Item
-    </ion-label>
-  </ion-item>
-
-  <!-- Item as an Anchor -->
-  <ion-item href="https://www.ionicframework.com">
-    <ion-label>
-      Anchor Item
-    </ion-label>
-  </ion-item>
+  <ion-list>
+    <ion-item button>
+      <ion-avatar slot="start" class="is-icon-avatar is-background-danger">
+        <ion-icon name="alert"></ion-icon>
+      </ion-avatar>
+      <ion-label>
+        <h2>Report a Problem</h2>
+      </ion-label>
+    </ion-item>
+    <ion-item button>
+      <ion-avatar slot="start" class="is-icon-avatar is-background-success">
+        <ion-icon name="help-buoy"></ion-icon>
+      </ion-avatar>
+      <ion-label>
+        <h2>Help</h2>
+      </ion-label>
+    </ion-item>
+    <ion-item button>
+      <ion-avatar slot="start" class="is-icon-avatar is-background-light">
+        <ion-icon name="document"></ion-icon>
+      </ion-avatar>
+      <ion-label>
+        <h2>Terms and Conditions</h2>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>

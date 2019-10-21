@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
-
 import { TimeTablePage } from './time-table.page';
+import { NgCalendarModule } from 'ionic2-calendar';
 
 const routes: Routes = [
   {
@@ -19,6 +19,7 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
+    NgCalendarModule,
     RouterModule.forChild(routes)
   ],
   declarations: [TimeTablePage]
