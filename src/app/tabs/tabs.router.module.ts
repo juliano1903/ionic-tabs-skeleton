@@ -48,10 +48,6 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: '../auth/page/login/login.module#LoginPageModule'
-  },
-  {
-    path: 'login',
-    loadChildren: '../auth/page/login/login.module#LoginPageModule'
   }
 ];
 

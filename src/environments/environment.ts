@@ -5,13 +5,13 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: 'AIzaSyCjyqTKZ94siC_714UF0kGHcEA7wI2m_1o',
-    authDomain: 'ionic-firestore-tasks-1f00a.firebaseapp.com',
-    databaseURL: 'https://ionic-firestore-tasks-1f00a.firebaseio.com',
-    projectId: 'ionic-firestore-tasks-1f00a',
-    storageBucket: 'ionic-firestore-tasks-1f00a.appspot.com',
-    messagingSenderId: '804128580811',
-    appId: '1:804128580811:web:250105b1a7d4df8566674e'
+    apiKey: 'AIzaSyAGUZnNy2H5AsSszWuCLd1Bni_ylIrpLFw',
+    authDomain: 'scheduler-5e722.firebaseapp.com',
+    databaseURL: 'https://scheduler-5e722.firebaseio.com',
+    projectId: 'scheduler-5e722',
+    storageBucket: 'scheduler-5e722.appspot.com',
+    messagingSenderId: '984659202099',
+    appId: '1:984659202099:web:f2744c74f08cda709b5346'
   }
 };
 
