@@ -8,11 +8,12 @@ export interface User {
   name: string;
   email: string;
   password: string;
-  addres: string;
+  address: string;
   city: string;
   state: string;
   pictureURL: string;
   register: string;
+  phone: string;
 }
 
 export interface AuthOptions {
