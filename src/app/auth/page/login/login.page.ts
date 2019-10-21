@@ -6,6 +6,7 @@ import { NavController } from '@ionic/angular';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { AuthProvider } from 'src/app/core/services/auth.types';
 import { OverlayService } from 'src/app/core/services/overlay.service';
+import { UsersService } from 'src/app/tabs/services/users.service';
 
 @Component({
   selector: 'app-login',
@@ -24,6 +25,7 @@ export class LoginPage implements OnInit {
 
   constructor(
     private authService: AuthService,
+    private usersService: UsersService,
     private fb: FormBuilder,
     private navCtrl: NavController,
     private route: ActivatedRoute,
@@ -65,12 +67,21 @@ export class LoginPage implements OnInit {
 
   async onSubmit(provider: AuthProvider): Promise<void> {
     const loading = await this.overlayService.loading();
+    const isSignIn = this.configs.isSignIn;
+
     try {
       const credentials = await this.authService.authenticate({
-        isSignIn: this.configs.isSignIn,
+        isSignIn,
         user: this.authForm.value,
         provider
       });
+
+      if (!isSignIn) {
+        this.authForm.value.id = this.authService.currentUserId();
+        console.log(this.authForm.value);
+        this.usersService.create(this.authForm.value);
+      }
+
       this.navCtrl.navigateForward(this.route.snapshot.queryParamMap.get('redirect') || '/tabs');
     } catch (e) {
       console.log('Auth error: ', e);
