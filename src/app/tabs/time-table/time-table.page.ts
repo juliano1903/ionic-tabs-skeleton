@@ -1,10 +1,11 @@
 import { CalendarComponent } from 'ionic2-calendar/calendar';
 import { Component, ViewChild, OnInit, Inject, LOCALE_ID } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { formatDate } from '@angular/common';
 import { SchedulesService } from '../services/schedules.service';
 import { Schedule } from '../models/schedule.model';
 import { Subscription } from 'rxjs';
+import { TimeTableModalPage } from 'src/app/tabs/modals/time-table-modal/time-table-modal.page';
 
 @Component({
   selector: 'app-time-table',
@@ -28,11 +29,13 @@ export class TimeTablePage {
   };
 
   @ViewChild(CalendarComponent, { static: true }) myCal: CalendarComponent;
+  dataReturned: any;
 
   constructor(
     private alertCtrl: AlertController,
     @Inject(LOCALE_ID) private locale: string,
-    private schedulesService: SchedulesService
+    private schedulesService: SchedulesService,
+    private modalController: ModalController
   ) {
     this.schedulesSubscription = schedulesService.getAllByLoggedUser().subscribe(data => {
       this.eventSource = [];
@@ -109,7 +112,7 @@ export class TimeTablePage {
   }
 
   // Calendar event was clicked
-  async onEventSelected(event) {
+  async onEventSelected_(event) {
     // Use Angular date pipe for conversion
     const start = formatDate(event.startTime, 'medium', this.locale);
     const end = formatDate(event.endTime, 'medium', this.locale);
@@ -123,6 +126,27 @@ export class TimeTablePage {
       buttons: ['OK']
     });
     alert.present();
+  }
+
+  async onEventSelected(event) {
+    const modal = await this.modalController.create({
+      component: TimeTableModalPage,
+      componentProps: {
+        paramID: 123,
+        paramTitle: 'Test Title',
+        startDate: event.startTime,
+        endDate: event.endTime
+      }
+    });
+
+    modal.onDidDismiss().then(dataReturned => {
+      if (dataReturned !== null) {
+        this.dataReturned = dataReturned.data;
+        // alert('Modal Sent Data :'+ dataReturned);
+      }
+    });
+
+    return await modal.present();
   }
 
   onTimeSelected(ev) {
