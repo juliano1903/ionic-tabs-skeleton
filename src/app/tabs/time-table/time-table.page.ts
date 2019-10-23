@@ -66,7 +66,8 @@ export class TimeTablePage {
       startTime: new Date(this.schedule.startTime),
       endTime: new Date(this.schedule.endTime),
       allDay: false,
-      desc: this.schedule.location
+      desc: this.schedule.location,
+      schedule: this.schedule
     };
 
     if (eventCopy.allDay) {
@@ -114,6 +115,7 @@ export class TimeTablePage {
   // Calendar event was clicked
   async onEventSelected_(event) {
     // Use Angular date pipe for conversion
+    console.log(event);
     const start = formatDate(event.startTime, 'medium', this.locale);
     const end = formatDate(event.endTime, 'medium', this.locale);
 
@@ -132,10 +134,7 @@ export class TimeTablePage {
     const modal = await this.modalController.create({
       component: TimeTableModalPage,
       componentProps: {
-        paramID: 123,
-        paramTitle: 'Test Title',
-        startDate: event.startTime,
-        endDate: event.endTime
+        schedule: event.schedule
       }
     });
 

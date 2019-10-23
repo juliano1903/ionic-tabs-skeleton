@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
+import { Schedule } from '../../models/schedule.model';
+import { SchedulesService } from '../../services/schedules.service';
 
 @Component({
   selector: 'app-time-table-modal',
@@ -7,23 +9,42 @@ import { ModalController, NavParams } from '@ionic/angular';
   styleUrls: ['./time-table-modal.page.scss']
 })
 export class TimeTableModalPage implements OnInit {
-  modalTitle: string;
-  modelId: number;
-  startDate: Date;
-  endDate: Date;
+  effectiveStartTime: any;
+  effectiveEndTime: any;
+  notes: string;
+  schedule: Schedule;
 
-  constructor(private modalController: ModalController, private navParams: NavParams) {}
+  constructor(
+    private modalController: ModalController,
+    private navParams: NavParams,
+    private schedulesService: SchedulesService
+  ) {}
 
   ngOnInit() {
-    console.table(this.navParams);
-    this.modelId = this.navParams.data.paramID;
-    this.modalTitle = this.navParams.data.paramTitle;
-    this.startDate = this.navParams.data.startDate;
-    this.endDate = this.navParams.data.endDate;
+    this.schedule = this.navParams.data.schedule;
+    console.log(new Date(this.navParams.data.schedule.effectiveStartTime).toISOString());
+
+    if (this.schedule.effectiveStartTime) {
+      this.effectiveStartTime = new Date(
+        this.navParams.data.schedule.effectiveStartTime
+      ).toISOString();
+    } else {
+      this.effectiveStartTime = new Date(this.navParams.data.schedule.startTime).toISOString();
+    }
+
+    if (this.schedule.effectiveEndTime) {
+      this.effectiveEndTime = new Date(this.navParams.data.schedule.effectiveEndTime).toISOString();
+    } else {
+      this.effectiveEndTime = new Date(this.navParams.data.schedule.endTime).toISOString();
+    }
   }
 
   async closeModal() {
-    const onClosedData: string = 'Wrapped Up!';
-    await this.modalController.dismiss(onClosedData);
+    this.schedule.effectiveStartTime = this.effectiveStartTime;
+    this.schedule.effectiveEndTime = this.effectiveEndTime;
+
+    console.log(this.schedule);
+    this.schedulesService.update(this.schedule);
+    await this.modalController.dismiss();
   }
 }

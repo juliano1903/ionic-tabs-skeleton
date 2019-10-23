@@ -1,27 +1,17 @@
 <ion-header>
   <ion-toolbar text-center>
-    <ion-title>{{ modalTitle }}</ion-title>
+    <ion-title>Schedule Information</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-  <ion-grid>
-    <ion-row>
-      <ion-col text-center> ID : {{ startDate }} </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col text-center>
-        <ion-button (click)="closeModal()">Close Modal</ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-
   <ion-item>
     <ion-label>Start Time</ion-label>
     <ion-datetime
       displayFormat="MM/DD/YYYY HH:mm"
       pickerFormat="MM/DD/YYYY HH:mm"
-      value="{{ startDate }}"
+      value="{{ effectiveStartTime }}"
+      [(ngModel)]="effectiveStartTime"
     ></ion-datetime>
   </ion-item>
 
@@ -30,7 +20,29 @@
     <ion-datetime
       displayFormat="MM/DD/YYYY HH:mm"
       pickerFormat="MM/DD/YYYY HH:mm"
-      value="{{ endDate }}"
+      value="{{ effectiveEndTime }}"
+      [(ngModel)]="effectiveEndTime"
     ></ion-datetime>
   </ion-item>
+
+  <ion-item>
+    <ion-textarea
+      [(ngModel)]="schedule.notes"
+      placeholder="Enter more information here..."
+    ></ion-textarea>
+  </ion-item>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col text-center></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col text-right>
+        <ion-button color="danger" (click)="closeModal()">Cancel</ion-button>
+      </ion-col>
+      <ion-col text-left>
+        <ion-button (click)="closeModal()">Confirm</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
