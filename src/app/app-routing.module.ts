@@ -9,10 +9,11 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: './tabs/tabs.module#TabsPageModule'
-    // loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
   },
-  { path: 'example-modal', loadChildren: './example-modal/example-modal.module#ExampleModalPageModule' },
-  { path: 'time-table-modal', loadChildren: './tabs/modals/time-table-modal/time-table-modal.module#TimeTableModalPageModule' }
+  {
+    path: 'time-table-modal',
+    loadChildren: './tabs/modals/time-table-modal/time-table-modal.module#TimeTableModalPageModule'
+  }
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })],
