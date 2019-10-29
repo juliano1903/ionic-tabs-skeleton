@@ -11,9 +11,12 @@ export interface User {
   address: string;
   city: string;
   state: string;
-  pictureURL: string;
-  register: string;
+  country: string;
+  picture: string;
+  reg: string;
   phone: string;
+  birth: string;
+  specialties: Array<string>;
 }
 
 export interface AuthOptions {

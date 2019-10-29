@@ -5,11 +5,24 @@
 </ion-header>
 
 <ion-content *ngIf="user$ | async as user">
-  <div text-center margin class="is-profile-picture">
+  <div class="box">
+    <div class="preview">
+      <img *ngIf="!user.picture && !url" src="assets/imgs/profile.png" />
+      <img *ngIf="url" [src]="url" alt="" />
+      <img *ngIf="user.picture && !url" [src]="user.picture" alt="" />
+    </div>
+    <div class="uploadbtn">
+      <label>
+        <input (change)="uploadImage($event)" type="file" class="image-upload" accept="image/*" />
+      </label>
+    </div>
+  </div>
+
+  <div margin class="is-profile-picture">
     <img src="assets/imgs/profile.png" />
     <div>
-      <ion-fab vertical="undefined" horizontal="end" slot="fixed">
-        <ion-fab-button>
+      <ion-fab slot="fixed">
+        <ion-fab-button fill="outline" size="small">
           <ion-icon name="camera"></ion-icon>
         </ion-fab-button>
       </ion-fab>

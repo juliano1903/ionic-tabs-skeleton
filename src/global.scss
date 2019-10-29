@@ -24,8 +24,4 @@
 @import '~@ionic/angular/css/text-alignment.css';
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
-@import 'theme/essential/theme';
-
-.icon-7em {
-  font-size: 7em;
-}
+@import 'theme/essential/theme.scss';
