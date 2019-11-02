@@ -6,6 +6,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 
 import { Observable } from 'rxjs';
+import { Contract } from '../models/contract.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,15 +15,24 @@ export class UsersService extends Firestore<User> {
   constructor(
     private authService: AuthService,
     db: AngularFirestore,
-    private afs: AngularFirestore,
     private storage: AngularFireStorage
   ) {
     super(db);
     this.setCollection('/users');
   }
 
+  user: Observable<User>;
+
   getLoggedUser(): Observable<User> {
     return this.get(this.authService.currentUserId());
+  }
+
+  getContracts(id: string): Observable<Contract[]> {
+    return this.db
+      .collection<User>('users')
+      .doc<User>(id)
+      .collection<Contract>('contracts', ref => ref.where('disabled', '==', false))
+      .valueChanges();
   }
 
   saveImageRef(filePath, file) {

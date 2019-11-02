@@ -17,9 +17,7 @@ export class AuthService {
   }
 
   currentUserId(): string {
-    const user = this.afAuth.auth.currentUser.uid;
-    console.log(user);
-    return user;
+    return this.afAuth.auth.currentUser.uid;
   }
 
   updateUserPassword(password: string): boolean {

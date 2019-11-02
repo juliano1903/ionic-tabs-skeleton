@@ -1,3 +1,5 @@
+import { Contract } from 'src/app/tabs/models/contract.model';
+
 export enum AuthProvider {
   Email,
   Facebook
@@ -17,6 +19,7 @@ export interface User {
   phone: string;
   birth: string;
   specialties: Array<string>;
+  contracts: any;
 }
 
 export interface AuthOptions {

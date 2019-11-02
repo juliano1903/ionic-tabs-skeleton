@@ -5,6 +5,10 @@ import { SchedulesService } from '../services/schedules.service';
 import { OverlayService } from 'src/app/core/services/overlay.service';
 import * as moment from 'moment';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { UsersService } from '../services/users.service';
+import { User } from 'src/app/core/services/auth.types';
+import { Contract } from '../models/contract.model';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-schedule-list',
@@ -12,15 +16,40 @@ import { AuthService } from 'src/app/core/services/auth.service';
   styleUrls: ['./schedule-list.page.scss']
 })
 export class ScheduleListPage {
-  schedules$: Observable<Schedule[]>;
+  schedules$: Schedule[];
+  user: User;
+  contracts: Contract[];
+
   constructor(
     private schedulesService: SchedulesService,
     private overlayService: OverlayService,
-    private authService: AuthService
+    private authService: AuthService,
+    private usersService: UsersService,
+    private navCtrl: NavController
   ) {}
 
   ionViewDidEnter(): void {
-    this.schedules$ = this.schedulesService.getAllByLoggedUserAndAvailable();
+    this.schedulesService.getAll().subscribe(data => {
+      this.usersService.getLoggedUser().subscribe(user => {
+        this.user = user;
+        this.usersService.getContracts(this.authService.currentUserId()).subscribe(contracts => {
+          this.contracts = contracts;
+          this.applyFilters(data);
+        });
+      });
+    });
+  }
+
+  applyFilters(data) {
+    console.log(JSON.stringify(this.contracts).toLowerCase());
+    this.schedules$ = data.filter(
+      s =>
+        (s.userId === null || s.userId === '' || s.userId === this.authService.currentUserId()) &&
+        this.user.specialties.includes(s.specialty) &&
+        JSON.stringify(this.contracts)
+          .toLowerCase()
+          .indexOf(s.hospitalId.toLowerCase()) > 0
+    );
   }
 
   changeApply(schedule: Schedule) {
@@ -91,5 +120,10 @@ export class ScheduleListPage {
       ]
     });
     await alert.present();
+  }
+
+  logout() {
+    this.authService.logout();
+    this.navCtrl.navigateForward('/login');
   }
 }

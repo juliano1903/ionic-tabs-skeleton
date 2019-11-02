@@ -7,4 +7,6 @@ export interface Schedule {
   effectiveStartTime: Date;
   notes: string;
   userId: string;
+  specialty: string;
+  hospitalId: string;
 }
