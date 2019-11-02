@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from 'src/app/core/services/auth.types';
+import { User, AuthProvider } from 'src/app/core/services/auth.types';
 import { Observable } from 'rxjs';
 import { UsersService } from '../services/users.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { NavController } from '@ionic/angular';
 
 export interface Image {
   id: string;
@@ -19,7 +21,7 @@ export interface Image {
 export class ProfilePage {
   user$: Observable<User>;
   user: User;
-
+  profileForm: FormGroup;
   url: any;
   newImage: Image = {
     id: this.afs.createId(),
@@ -31,16 +33,50 @@ export class ProfilePage {
   constructor(
     private authService: AuthService,
     private usersService: UsersService,
-    private afs: AngularFirestore
+    private afs: AngularFirestore,
+    private fb: FormBuilder,
+    private navCtrl: NavController
   ) {}
+
+  private createForm(): void {
+    this.profileForm = this.fb.group({
+      name: [this.user.name, [Validators.required, Validators.required]],
+      email: [this.user.email, [Validators.required, Validators.email]],
+      phone: [this.user.phone, [Validators.required, Validators.required]],
+      address: [this.user.address, [Validators.required, Validators.required]],
+      city: [this.user.city, [Validators.required, Validators.required]],
+      state: [this.user.state, [Validators.required, Validators.required]],
+      reg: [this.user.reg, [Validators.required, Validators.required]],
+      password: [this.user.password, [Validators.required, Validators.required]]
+    });
+  }
 
   ionViewDidEnter(): void {
     this.user$ = this.usersService.getLoggedUser();
     this.user$.subscribe(user => {
       this.user = user;
       this.user.id = this.authService.currentUserId();
+      this.createForm();
     });
   }
+
+  async onSubmit(): Promise<void> {
+    this.user = {
+      ...this.user,
+      phone: this.profileForm.value.phone,
+      address: this.profileForm.value.address,
+      city: this.profileForm.value.city,
+      state: this.profileForm.value.state
+    };
+
+    console.log(this.user);
+    this.usersService.update(this.user);
+
+    if (this.profileForm.value.password) {
+      this.authService.updateUserPassword(this.profileForm.value.password);
+    }
+  }
+
   uploadImage(event) {
     this.loading = true;
     if (event.target.files && event.target.files[0]) {
@@ -77,5 +113,10 @@ export class ProfilePage {
         });
       };
     }
+  }
+
+  logout() {
+    this.authService.logout();
+    this.navCtrl.navigateForward('/login');
   }
 }

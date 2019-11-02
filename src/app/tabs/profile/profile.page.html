@@ -1,62 +1,74 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-title>Profile</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">
+        <ion-icon slot="icon-only" name="log-out"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content *ngIf="user$ | async as user">
-  <div class="box">
-    <div class="preview">
-      <img *ngIf="!user.picture && !url" src="assets/imgs/profile.png" />
-      <img *ngIf="url" [src]="url" alt="" />
-      <img *ngIf="user.picture && !url" [src]="user.picture" alt="" />
-    </div>
-    <div class="uploadbtn">
-      <label>
-        <input (change)="uploadImage($event)" type="file" class="image-upload" accept="image/*" />
-      </label>
-    </div>
-  </div>
-
   <div margin class="is-profile-picture">
-    <img src="assets/imgs/profile.png" />
+    <img *ngIf="!user.picture && !url" src="assets/imgs/profile.png" />
+    <img *ngIf="url" [src]="url" alt="" />
+    <img *ngIf="user.picture && !url" [src]="user.picture" alt="" />
     <div>
       <ion-fab slot="fixed">
         <ion-fab-button fill="outline" size="small">
-          <ion-icon name="camera"></ion-icon>
+          <label for="input">
+            <ion-icon style="font-size: 2em;" name="camera"></ion-icon>
+          </label>
+          <input
+            id="input"
+            (change)="uploadImage($event)"
+            type="file"
+            class="image-upload hideInput"
+            accept="image/*"
+          />
         </ion-fab-button>
       </ion-fab>
     </div>
   </div>
-
   <div text-center margin-bottom>
-    <h2 no-margin>{{ user.name }}</h2>
+    <h5 no-margin>{{ user.name }}</h5>
+  </div>
+  <div text-center margin-bottom>
+    <h5 no-margin>{{ user.email }}</h5>
   </div>
 
-  <ion-list>
-    <ion-item>
-      <ion-icon name="mail" color="primary" slot="start"></ion-icon>
-      <ion-label>
-        <h2>{{ user.email }}</h2>
-      </ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-icon name="call" color="primary" slot="start"></ion-icon>
-      <ion-label>
-        <h2>{{ user.phone }}</h2>
-      </ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-icon name="home" color="primary" slot="start"></ion-icon>
-      <ion-label>
-        <h2>{{ user.addres }}</h2>
-      </ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-icon name="home" color="primary" slot="start"></ion-icon>
-      <ion-label>
-        <h2>{{ user.addres }}</h2>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+  <form [formGroup]="profileForm" (submit)="onSubmit()">
+    <ion-list padding>
+      <ion-item>
+        <ion-label color="primary" position="stacked">Phone</ion-label>
+        <ion-input type="text" placeholder="Phone" formControlName="phone"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary" position="stacked">Address</ion-label>
+        <ion-input type="text" placeholder="Address" formControlName="address"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary" position="stacked">City</ion-label>
+        <ion-input type="text" placeholder="City" formControlName="city"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary" position="stacked">State</ion-label>
+        <ion-input type="text" placeholder="State" formControlName="state"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary" position="stacked">Register</ion-label>
+        <ion-input type="text" placeholder="Register" formControlName="reg"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary" position="stacked">Password</ion-label>
+        <ion-input type="password" placeholder="Password" formControlName="password"></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <ion-button expand="block" type="submit" [disabled]="profileForm.invalid">
+      Save
+    </ion-button>
+  </form>
 </ion-content>

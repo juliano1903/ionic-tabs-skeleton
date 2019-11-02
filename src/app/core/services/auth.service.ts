@@ -22,6 +22,19 @@ export class AuthService {
     return user;
   }
 
+  updateUserPassword(password: string): boolean {
+    this.afAuth.auth.currentUser
+      .updatePassword(password)
+      .then(() => {
+        return true;
+      })
+      .catch(e => {
+        console.log(e);
+        return false;
+      });
+    return false;
+  }
+
   get isAuthenticated(): Observable<boolean> {
     return this.authState$.pipe(map(user => user !== null));
   }
