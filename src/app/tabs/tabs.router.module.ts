@@ -43,6 +43,16 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'balance',
+        children: [
+          {
+            path: '',
+            loadChildren: './balance/balance.module#BalancePageModule',
+            canLoad: [AuthGuard]
+          }
+        ]
+      },
+      {
         path: '',
         redirectTo: '/tabs/schedule',
         pathMatch: 'full'

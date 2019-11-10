@@ -56,17 +56,20 @@ export class TimeTablePage {
       effectiveEndTime: new Date(),
       effectiveStartTime: new Date(),
       notes: 'string',
-      userId: null
+      userId: null,
+      specialty: '',
+      hospitalId: '',
+      hospitalName: ''
     };
   }
 
   addEvent() {
     const eventCopy = {
-      title: this.schedule.location,
+      title: this.schedule.hospitalName,
       startTime: new Date(this.schedule.startTime),
       endTime: new Date(this.schedule.endTime),
       allDay: false,
-      desc: this.schedule.location,
+      desc: this.schedule.hospitalName,
       schedule: this.schedule
     };
 

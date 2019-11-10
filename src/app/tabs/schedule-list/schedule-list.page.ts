@@ -41,14 +41,22 @@ export class ScheduleListPage {
   }
 
   applyFilters(data) {
-    console.log(JSON.stringify(this.contracts).toLowerCase());
     this.schedules$ = data.filter(
       s =>
-        (s.userId === null || s.userId === '' || s.userId === this.authService.currentUserId()) &&
-        this.user.specialties.includes(s.specialty) &&
-        JSON.stringify(this.contracts)
-          .toLowerCase()
-          .indexOf(s.hospitalId.toLowerCase()) > 0
+        (!s.userId ||
+          s.userId === null ||
+          s.userId === '' ||
+          s.userId === this.authService.currentUserId()) &&
+        this.userHasAutorization(s)
+    );
+  }
+
+  userHasAutorization(schedule: Schedule): boolean {
+    console.log(schedule);
+    return (
+      this.contracts.filter(
+        f => f.hospitalId === schedule.hospitalId && f.specialty === schedule.specialty
+      ).length > 0
     );
   }
 
@@ -65,7 +73,7 @@ export class ScheduleListPage {
       header: 'Dismiss!',
       message:
         'Confirm dismiss for ' +
-        schedule.location +
+        schedule.hospitalName +
         '<p>At ' +
         moment(new Date(schedule.startTime)).format('MM/DD/YYYY HH:mm') +
         '</p>',
@@ -75,7 +83,7 @@ export class ScheduleListPage {
           role: 'cancel',
           cssClass: 'secondary',
           handler: blah => {
-            console.log('Confirm Cancel: blah');
+            console.log('Confirm Cancel!');
           }
         },
         {

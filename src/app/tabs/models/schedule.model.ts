@@ -9,4 +9,7 @@ export interface Schedule {
   userId: string;
   specialty: string;
   hospitalId: string;
+  hospitalName: string;
+  receivedAmount?: number;
+  predictedAmount?: number;
 }

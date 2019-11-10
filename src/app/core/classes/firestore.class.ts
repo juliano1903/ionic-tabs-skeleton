@@ -18,7 +18,7 @@ export abstract class Firestore<T extends { id: string }> {
   }
 
   getAll(): Observable<T[]> {
-    return this.collection.valueChanges();
+    return this.collection.valueChanges({ idField: 'id' });
   }
 
   get(id: string): Observable<T> {
