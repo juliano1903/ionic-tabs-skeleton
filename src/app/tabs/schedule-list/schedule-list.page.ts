@@ -26,7 +26,7 @@ export class ScheduleListPage {
     private authService: AuthService,
     private usersService: UsersService,
     private navCtrl: NavController
-  ) {}
+  ) { }
 
   ionViewDidEnter(): void {
     this.schedulesService.getAll().subscribe(data => {
@@ -35,6 +35,9 @@ export class ScheduleListPage {
         this.usersService.getContracts(this.authService.currentUserId()).subscribe(contracts => {
           this.contracts = contracts;
           this.applyFilters(data);
+          this.schedules$.sort((a, b) => {
+            return new Date(a.startTime).getTime() - new Date(b.startTime).getTime();
+          });
         });
       });
     });
@@ -47,12 +50,12 @@ export class ScheduleListPage {
           s.userId === null ||
           s.userId === '' ||
           s.userId === this.authService.currentUserId()) &&
+        !s.disabled &&
         this.userHasAutorization(s)
     );
   }
 
   userHasAutorization(schedule: Schedule): boolean {
-    console.log(schedule);
     return (
       this.contracts.filter(
         f => f.hospitalId === schedule.hospitalId && f.specialty === schedule.specialty
@@ -83,13 +86,11 @@ export class ScheduleListPage {
           role: 'cancel',
           cssClass: 'secondary',
           handler: blah => {
-            console.log('Confirm Cancel!');
           }
         },
         {
           text: 'Confirm',
           handler: () => {
-            console.log('Confirm Okay');
             schedule.userId = null;
             this.schedulesService.updateSchedule(schedule);
           }
@@ -114,13 +115,11 @@ export class ScheduleListPage {
           role: 'cancel',
           cssClass: 'secondary',
           handler: blah => {
-            console.log('Confirm Cancel: blah');
           }
         },
         {
           text: 'Confirm',
           handler: () => {
-            console.log('Confirm Okay');
             schedule.userId = this.authService.currentUserId();
             this.schedulesService.updateSchedule(schedule);
           }

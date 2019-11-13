@@ -18,6 +18,8 @@ export class BalancePage {
   schedules$: Schedule[];
   user: User;
   contracts: Contract[];
+  dateFilter: Array<Date>;
+  selectedDate: moment.Moment;
 
   constructor(
     private schedulesService: SchedulesService,
@@ -28,11 +30,24 @@ export class BalancePage {
   ) {}
 
   ionViewDidEnter(): void {
+    this.dateFilter = new Array();
+    var date = new Date();
+    
+    this.selectedDate = moment();
+
+    this.dateFilter.push(new Date(date.getFullYear(), date.getDate() - 4 ));
+    this.dateFilter.push(new Date(date.getFullYear(), date.getDate() - 3 ));
+    this.dateFilter.push(new Date(date.getFullYear(), date.getDate() - 2 ));
+    this.dateFilter.push(new Date(date.getFullYear(), date.getDate() - 1 ));
+    this.dateFilter.push(new Date(date.getFullYear(), date.getDate()));
+    this.dateFilter.push(new Date(date.getFullYear(), date.getDate() + 1 ));
+
     this.schedulesService.getAllByLoggedUser().subscribe(data => {
       this.usersService.getLoggedUser().subscribe(user => {
         this.user = user;
         this.usersService.getContracts(this.authService.currentUserId()).subscribe(contracts => {
           this.contracts = contracts;
+          this.schedules$ = data;
           this.applyFilters(data);
         });
       });
@@ -40,11 +55,17 @@ export class BalancePage {
   }
 
   applyFilters(data: Schedule[]) {
+
+    var nextMonth = moment(this.selectedDate).add(1 ,'M').startOf('month');
+    var actualMonth = moment(this.selectedDate).startOf('month');
+
     this.contracts.forEach(contract => {
       contract.predictedValue = 0;
       contract.receivedValue = 0;
       const schedulesContract = data.filter(
-        s => contract.hospitalId === s.hospitalId && contract.specialty === s.specialty
+        s => contract.hospitalId === s.hospitalId && contract.specialty === s.specialty 
+        && moment(s.startTime).isAfter(actualMonth)
+        && moment(s.startTime).isBefore(nextMonth)
       );
 
       schedulesContract.forEach(schedule => {
@@ -69,6 +90,13 @@ export class BalancePage {
         contract.schedules = schedulesContract;
       }
     });
+  }
+
+  onChange() {
+    this.contracts.forEach(contract => {
+      contract.schedules = null;
+    })
+    this.applyFilters(this.schedules$);
   }
 
   logout() {

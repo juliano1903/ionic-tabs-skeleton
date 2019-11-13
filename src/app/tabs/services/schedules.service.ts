@@ -36,7 +36,7 @@ export class SchedulesService extends Firestore<Schedule> {
       .collection<Schedule>('/schedules', ref =>
         ref.where('userId', '==', this.authService.currentUserId())
       )
-      .valueChanges();
+      .valueChanges({ idField: 'id' });
   }
 
   public getAllByLoggedUserAndAvailable(): Observable<Schedule[]> {
@@ -44,7 +44,6 @@ export class SchedulesService extends Firestore<Schedule> {
   }
 
   orQuery(): Observable<Schedule[]> {
-    console.log(this.authService.currentUserId());
 
     const $one = this.db
       .collection<Schedule>('/schedules', ref =>

@@ -78,13 +78,11 @@ export class LoginPage implements OnInit {
 
       if (!isSignIn) {
         this.authForm.value.id = this.authService.currentUserId();
-        console.log(this.authForm.value);
         this.usersService.create(this.authForm.value);
       }
 
       this.navCtrl.navigateForward(this.route.snapshot.queryParamMap.get('redirect') || '/tabs');
     } catch (e) {
-      console.log('Auth error: ', e);
       await this.overlayService.toast({
         message: e.message
       });

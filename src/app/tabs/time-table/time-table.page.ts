@@ -1,11 +1,12 @@
 import { CalendarComponent } from 'ionic2-calendar/calendar';
 import { Component, ViewChild, OnInit, Inject, LOCALE_ID } from '@angular/core';
-import { AlertController, ModalController } from '@ionic/angular';
+import { AlertController, ModalController, NavController } from '@ionic/angular';
 import { formatDate } from '@angular/common';
 import { SchedulesService } from '../services/schedules.service';
 import { Schedule } from '../models/schedule.model';
 import { Subscription } from 'rxjs';
 import { TimeTableModalPage } from 'src/app/tabs/modals/time-table-modal/time-table-modal.page';
+import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
   selector: 'app-time-table',
@@ -35,11 +36,13 @@ export class TimeTablePage {
     private alertCtrl: AlertController,
     @Inject(LOCALE_ID) private locale: string,
     private schedulesService: SchedulesService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private navCtrl: NavController,
+    private authService: AuthService,
+
   ) {
     this.schedulesSubscription = schedulesService.getAllByLoggedUser().subscribe(data => {
       this.eventSource = [];
-      console.log(this.eventSource);
       data.forEach(item => {
         this.schedule = item;
         this.addEvent();
@@ -59,7 +62,8 @@ export class TimeTablePage {
       userId: null,
       specialty: '',
       hospitalId: '',
-      hospitalName: ''
+      hospitalName: '',
+      disabled: false
     };
   }
 
@@ -118,11 +122,8 @@ export class TimeTablePage {
   // Calendar event was clicked
   async onEventSelected_(event) {
     // Use Angular date pipe for conversion
-    console.log(event);
     const start = formatDate(event.startTime, 'medium', this.locale);
     const end = formatDate(event.endTime, 'medium', this.locale);
-
-    console.log(event);
 
     const alert = await this.alertCtrl.create({
       header: event.title,
@@ -156,5 +157,10 @@ export class TimeTablePage {
     this.schedule.startTime = selected;
     selected.setHours(selected.getHours() + 1);
     this.schedule.endTime = selected;
+  }
+
+  logout() {
+    this.authService.logout();
+    this.navCtrl.navigateForward('/login');
   }
 }

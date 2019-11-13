@@ -12,4 +12,5 @@ export interface Schedule {
   hospitalName: string;
   receivedAmount?: number;
   predictedAmount?: number;
+  disabled: boolean;
 }

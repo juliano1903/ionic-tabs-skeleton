@@ -18,11 +18,10 @@ export class TimeTableModalPage implements OnInit {
     private modalController: ModalController,
     private navParams: NavParams,
     private schedulesService: SchedulesService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.schedule = this.navParams.data.schedule;
-    console.log(new Date(this.navParams.data.schedule.effectiveStartTime).toISOString());
 
     if (this.schedule.effectiveStartTime) {
       this.effectiveStartTime = new Date(
@@ -39,12 +38,15 @@ export class TimeTableModalPage implements OnInit {
     }
   }
 
-  async closeModal() {
-    this.schedule.effectiveStartTime = this.effectiveStartTime;
-    this.schedule.effectiveEndTime = this.effectiveEndTime;
+  async confirmCheckin() {
+    this.schedule.effectiveStartTime = this.effectiveStartTime === undefined ? null : this.effectiveStartTime;
+    this.schedule.effectiveEndTime = this.effectiveEndTime === undefined ? null : this.effectiveEndTime;
 
-    console.log(this.schedule);
     this.schedulesService.update(this.schedule);
+    await this.modalController.dismiss();
+  }
+
+  async closeModal() {
     await this.modalController.dismiss();
   }
 }

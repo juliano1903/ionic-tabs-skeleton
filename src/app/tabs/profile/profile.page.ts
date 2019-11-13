@@ -69,7 +69,6 @@ export class ProfilePage {
       state: this.profileForm.value.state
     };
 
-    console.log(this.user);
     this.usersService.update(this.user);
 
     if (this.profileForm.value.password) {
@@ -87,11 +86,9 @@ export class ProfilePage {
       reader.onload = (e: any) => {
         // called once readAsDataURL is completed
         this.url = e.target.result;
-        console.log('url', this.url);
 
         // For Uploading Image To Firebase
         const fileraw = event.target.files[0];
-        console.log(fileraw);
         const filePath =
           '/Image/' +
           this.newImage.id +
@@ -99,14 +96,11 @@ export class ProfilePage {
           'Image' +
           (Math.floor(1000 + Math.random() * 9000) + 1);
         const result = this.usersService.saveImageRef(filePath, fileraw);
-        console.log('result', result);
         const ref = result.ref;
         result.task.then(a => {
           ref.getDownloadURL().subscribe(image => {
-            console.log('image', image);
             this.newImage.image = image;
             this.user.picture = this.newImage.image;
-            console.log('res', this.user);
             this.usersService.update(this.user);
             this.loading = false;
           });

@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "scheduler-5e722"
+    "default": "scheduler-5e722",
+    "novamedica-it": "novamedica-it"
   }
 }

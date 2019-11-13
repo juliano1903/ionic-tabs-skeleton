@@ -7,29 +7,18 @@
 <ion-content padding>
   <ion-item>
     <ion-label>Start Time</ion-label>
-    <ion-datetime
-      displayFormat="MM/DD/YYYY HH:mm"
-      pickerFormat="MM/DD/YYYY HH:mm"
-      value="{{ effectiveStartTime }}"
-      [(ngModel)]="effectiveStartTime"
-    ></ion-datetime>
+    <ion-datetime displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD/MM/YYYY HH:mm" value="{{ effectiveStartTime }}"
+      [(ngModel)]="effectiveStartTime"></ion-datetime>
   </ion-item>
 
   <ion-item>
     <ion-label>End Time</ion-label>
-    <ion-datetime
-      displayFormat="MM/DD/YYYY HH:mm"
-      pickerFormat="MM/DD/YYYY HH:mm"
-      value="{{ effectiveEndTime }}"
-      [(ngModel)]="effectiveEndTime"
-    ></ion-datetime>
+    <ion-datetime displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD/MM/YYYY HH:mm" value="{{ effectiveEndTime }}"
+      [(ngModel)]="effectiveEndTime"></ion-datetime>
   </ion-item>
 
   <ion-item>
-    <ion-textarea
-      [(ngModel)]="schedule.notes"
-      placeholder="Enter more information here..."
-    ></ion-textarea>
+    <ion-textarea [(ngModel)]="schedule.notes" placeholder="Enter more information here..."></ion-textarea>
   </ion-item>
 
   <ion-grid>
@@ -41,7 +30,7 @@
         <ion-button color="danger" (click)="closeModal()">Cancel</ion-button>
       </ion-col>
       <ion-col text-left>
-        <ion-button (click)="closeModal()">Confirm</ion-button>
+        <ion-button (click)="confirmCheckin()">Confirm</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
