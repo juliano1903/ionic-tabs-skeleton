@@ -1,36 +1,39 @@
 <ion-header>
   <ion-toolbar text-center>
-    <ion-title>Schedule Information</ion-title>
+    <ion-title>Schedule Check-in</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-  <ion-item>
-    <ion-label>Start Time</ion-label>
-    <ion-datetime displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD/MM/YYYY HH:mm" value="{{ effectiveStartTime }}"
-      [(ngModel)]="effectiveStartTime"></ion-datetime>
+
+  <ion-item *ngIf="!schedule.checkIn">
+    <ion-label> Check-in </ion-label>
+    <ion-label> {{ checkIn | date: 'dd/MM/yyyy HH:MM'  }} </ion-label>
+    <ion-button style="min-width: 90px" (click)="confirmCheckIn()">CHECK-IN</ion-button>
   </ion-item>
 
-  <ion-item>
-    <ion-label>End Time</ion-label>
-    <ion-datetime displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD/MM/YYYY HH:mm" value="{{ effectiveEndTime }}"
-      [(ngModel)]="effectiveEndTime"></ion-datetime>
+  <ion-item *ngIf="schedule.checkIn">
+    <ion-label > Check-in </ion-label>     
+    <ion-label > {{ schedule.checkIn | date: 'dd/MM/yyyy HH:MM' }} </ion-label>
+    <ion-icon name="done-all" color="success" class="is-icon-no-color"></ion-icon>
   </ion-item>
 
-  <ion-item>
-    <ion-textarea [(ngModel)]="schedule.notes" placeholder="Enter more information here..."></ion-textarea>
+  <ion-item *ngIf="!schedule.checkOut">
+    <ion-label> Check-out </ion-label>
+    <ion-label> {{ checkOut | date: 'dd/MM/yyyy HH:MM'  }} </ion-label>
+    <ion-button [disabled]="!schedule.checkIn" style="min-width: 90px" (click)="confirmCheckOut()">CHECK-OUT</ion-button>
+  </ion-item>
+
+  <ion-item *ngIf="schedule.checkOut">
+    <ion-label > Check-out </ion-label>     
+    <ion-label > {{ schedule.checkOut | date: 'dd/MM/yyyy HH:MM' }} </ion-label>
+    <ion-icon name="done-all" color="success" class="is-icon-no-color"></ion-icon>
   </ion-item>
 
   <ion-grid>
     <ion-row>
-      <ion-col text-center></ion-col>
-    </ion-row>
-    <ion-row>
       <ion-col text-right>
-        <ion-button color="danger" (click)="closeModal()">Cancel</ion-button>
-      </ion-col>
-      <ion-col text-left>
-        <ion-button (click)="confirmCheckin()">Confirm</ion-button>
+        <ion-button color="primary" expand="block" (click)="closeModal()">CLOSE</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

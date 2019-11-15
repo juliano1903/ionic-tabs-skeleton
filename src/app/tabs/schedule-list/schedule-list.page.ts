@@ -32,7 +32,8 @@ export class ScheduleListPage {
     this.schedulesService.getAll().subscribe(data => {
       this.usersService.getLoggedUser().subscribe(user => {
         this.user = user;
-        this.usersService.getContracts(this.authService.currentUserId()).subscribe(contracts => {
+        this.user.id = this.authService.currentUserId();
+        this.usersService.getContracts(this.user.id).subscribe(contracts => {
           this.contracts = contracts;
           this.applyFilters(data);
           this.schedules$.sort((a, b) => {
@@ -51,7 +52,9 @@ export class ScheduleListPage {
           s.userId === '' ||
           s.userId === this.authService.currentUserId()) &&
         !s.disabled &&
-        this.userHasAutorization(s)
+        this.userHasAutorization(s) &&
+        !this.isEffectived(s)
+
     );
   }
 
@@ -61,6 +64,10 @@ export class ScheduleListPage {
         f => f.hospitalId === schedule.hospitalId && f.specialty === schedule.specialty
       ).length > 0
     );
+  }
+
+  isEffectived(s: Schedule) {
+    return s.effectiveEndTime || s.effectiveStartTime
   }
 
   changeApply(schedule: Schedule) {
@@ -92,6 +99,7 @@ export class ScheduleListPage {
           text: 'Confirm',
           handler: () => {
             schedule.userId = null;
+            schedule.userName = null;
             this.schedulesService.updateSchedule(schedule);
           }
         }
@@ -105,7 +113,7 @@ export class ScheduleListPage {
       header: 'Apply!',
       message:
         'Confirm apply for ' +
-        schedule.location +
+        schedule.hospitalName +
         '<p>At ' +
         moment(new Date(schedule.startTime)).format('MM/DD/YYYY HH:mm') +
         '</p>',
@@ -120,7 +128,8 @@ export class ScheduleListPage {
         {
           text: 'Confirm',
           handler: () => {
-            schedule.userId = this.authService.currentUserId();
+            schedule.userId = this.user.id;
+            schedule.userName = this.user.name; 
             this.schedulesService.updateSchedule(schedule);
           }
         }

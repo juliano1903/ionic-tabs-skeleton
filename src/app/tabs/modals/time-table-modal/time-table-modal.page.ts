@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
 import { Schedule } from '../../models/schedule.model';
 import { SchedulesService } from '../../services/schedules.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-time-table-modal',
@@ -13,6 +14,8 @@ export class TimeTableModalPage implements OnInit {
   effectiveEndTime: any;
   notes: string;
   schedule: Schedule;
+  checkIn: string;
+  checkOut: string;
 
   constructor(
     private modalController: ModalController,
@@ -23,30 +26,53 @@ export class TimeTableModalPage implements OnInit {
   ngOnInit() {
     this.schedule = this.navParams.data.schedule;
 
-    if (this.schedule.effectiveStartTime) {
-      this.effectiveStartTime = new Date(
-        this.navParams.data.schedule.effectiveStartTime
-      ).toISOString();
-    } else {
-      this.effectiveStartTime = new Date(this.navParams.data.schedule.startTime).toISOString();
-    }
+    this.checkIn = moment().toISOString();
+    this.checkOut = moment().toISOString();
 
-    if (this.schedule.effectiveEndTime) {
-      this.effectiveEndTime = new Date(this.navParams.data.schedule.effectiveEndTime).toISOString();
-    } else {
-      this.effectiveEndTime = new Date(this.navParams.data.schedule.endTime).toISOString();
-    }
+    //if (this.schedule.effectiveStartTime) {
+    //  this.effectiveStartTime = new Date(
+    //    this.navParams.data.schedule.effectiveStartTime
+    //  ).toISOString();
+    //} else {
+    //  this.effectiveStartTime = new Date(this.navParams.data.schedule.startTime).toISOString();
+   // }
+
+    //if (this.schedule.effectiveEndTime) {
+    //  this.effectiveEndTime = new Date(this.navParams.data.schedule.effectiveEndTime).toISOString();
+    //} else {
+    //  this.effectiveEndTime = new Date(this.navParams.data.schedule.endTime).toISOString();
+   // }
   }
 
-  async confirmCheckin() {
-    this.schedule.effectiveStartTime = this.effectiveStartTime === undefined ? null : this.effectiveStartTime;
-    this.schedule.effectiveEndTime = this.effectiveEndTime === undefined ? null : this.effectiveEndTime;
-
+  async confirmCheckIn() {
+    this.schedule.checkIn = this.checkIn;
     this.schedulesService.update(this.schedule);
-    await this.modalController.dismiss();
+    //await this.modalController.dismiss();
+  }
+  
+  async confirmCheckOut() {
+    this.schedule.checkOut = this.checkOut;
+    this.schedulesService.update(this.schedule);
+    //await this.modalController.dismiss();
   }
 
   async closeModal() {
     await this.modalController.dismiss();
+  }
+
+  onCheckInChange() {
+    if(this.checkIn) {
+      this.schedule.checkIn = moment().format('DD/MM/YYYY HH:MM');
+    } else {
+      this.schedule.checkIn = '';
+    }
+  }
+
+  onCheckOutChange() {
+    if (this.checkOut) {
+      this.schedule.checkOut = moment().format('DD/MM/YYYY HH:MM');
+    } else {
+      this.schedule.checkOut = '';
+    }
   }
 }

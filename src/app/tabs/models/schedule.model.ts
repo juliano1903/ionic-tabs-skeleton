@@ -13,4 +13,8 @@ export interface Schedule {
   receivedAmount?: number;
   predictedAmount?: number;
   disabled: boolean;
+  userName?: string;
+  checkIn?: string;
+  checkOut?: string;
+  price?: number;
 }

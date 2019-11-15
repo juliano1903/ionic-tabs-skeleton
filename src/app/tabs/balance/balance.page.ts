@@ -35,12 +35,11 @@ export class BalancePage {
     
     this.selectedDate = moment();
 
+    this.dateFilter.push(new Date(date.getFullYear(), date.getDate() - 5 ));
     this.dateFilter.push(new Date(date.getFullYear(), date.getDate() - 4 ));
     this.dateFilter.push(new Date(date.getFullYear(), date.getDate() - 3 ));
     this.dateFilter.push(new Date(date.getFullYear(), date.getDate() - 2 ));
     this.dateFilter.push(new Date(date.getFullYear(), date.getDate() - 1 ));
-    this.dateFilter.push(new Date(date.getFullYear(), date.getDate()));
-    this.dateFilter.push(new Date(date.getFullYear(), date.getDate() + 1 ));
 
     this.schedulesService.getAllByLoggedUser().subscribe(data => {
       this.usersService.getLoggedUser().subscribe(user => {
@@ -69,18 +68,18 @@ export class BalancePage {
       );
 
       schedulesContract.forEach(schedule => {
-        if (schedule.effectiveEndTime && schedule.effectiveEndTime) {
+        if (schedule.checkIn && schedule.checkOut) {
           const effectiveMinutes = moment
-            .duration(moment(schedule.effectiveEndTime).diff(schedule.effectiveStartTime))
+            .duration(moment(schedule.checkOut).diff(schedule.checkIn))
             .asHours();
-          schedule.receivedAmount = contract.price * effectiveMinutes;
-          contract.receivedValue = +schedule.receivedAmount;
+          schedule.receivedAmount = (schedule.price ? schedule.price : contract.price) * effectiveMinutes;
+          contract.receivedValue += schedule.receivedAmount;
         } else {
           const predictedMinutes = moment
             .duration(moment(schedule.endTime).diff(schedule.startTime))
             .asHours();
-          schedule.predictedAmount = contract.price * predictedMinutes;
-          contract.predictedValue = +schedule.predictedAmount;
+          schedule.predictedAmount = (schedule.price? schedule.price : contract.price) * predictedMinutes;
+          contract.predictedValue += schedule.predictedAmount;
         }
       });
 

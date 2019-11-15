@@ -35,6 +35,7 @@ export class SchedulesService extends Firestore<Schedule> {
     return this.db
       .collection<Schedule>('/schedules', ref =>
         ref.where('userId', '==', this.authService.currentUserId())
+        .where('disabled', '==',  false)
       )
       .valueChanges({ idField: 'id' });
   }
