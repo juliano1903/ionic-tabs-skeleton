@@ -17,4 +17,5 @@ export interface Schedule {
   checkIn?: string;
   checkOut?: string;
   price?: number;
+  dismissRequested?: boolean;
 }

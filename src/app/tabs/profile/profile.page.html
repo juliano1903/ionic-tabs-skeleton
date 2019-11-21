@@ -10,6 +10,13 @@
   </ion-toolbar>
 </ion-header>
 
+<!--<ion-content>
+<div>
+  <ion-button (click)="PickFile()">Pick File</ion-button>
+</div>
+
+</ion-content>-->
+
 <ion-content *ngIf="user$ | async as user">
   <div margin class="is-profile-picture">
     <img *ngIf="!user.picture && !url" src="assets/imgs/profile.png" />
@@ -63,7 +70,40 @@
       </ion-item>
       <ion-item>
         <ion-label color="primary" position="stacked">Password</ion-label>
-        <ion-input type="password" placeholder="Password" formControlName="password"></ion-input>
+        <ion-input type="password" placeholder="New Password" formControlName="password"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary" position="stacked">Upload Documents</ion-label>
+        <ion-input type="text" placeholder="Document Name" [(ngModel)]="documentName"  [ngModelOptions]="{standalone: true}" ></ion-input>
+        <ion-button slot="end" size="medium">
+          <label for="inputDocument">
+            <ion-icon style="font-size: 2em;" color="white" name="document"></ion-icon>
+          </label>
+          <input
+            id="inputDocument"
+            (change)="uploadFile($event, null)"
+            type="file"
+            class="image-upload hideInput"
+            accept="/*"
+          />
+      </ion-button>
+      </ion-item>
+      <ion-item>
+        <ion-text class="ion-text-center">
+            Polizza Assicurativa Professionale
+        </ion-text>
+        <ion-button slot="end" size="medium">
+          <label for="inputFile">
+            <ion-icon style="font-size: 2em;" color="white" name="document"></ion-icon>
+          </label>
+          <input
+            id="inputFile"
+            (change)="uploadFile($event, 'polizza_assicurativa_professionale')"
+            type="file"
+            class="image-upload hideInput"
+            accept="/*"
+          />
+        </ion-button>
       </ion-item>
     </ion-list>
 

@@ -14,8 +14,8 @@ export class TimeTableModalPage implements OnInit {
   effectiveEndTime: any;
   notes: string;
   schedule: Schedule;
-  checkIn: string;
-  checkOut: string;
+  checkIn: moment.Moment;
+  checkOut: moment.Moment;
 
   constructor(
     private modalController: ModalController,
@@ -26,9 +26,10 @@ export class TimeTableModalPage implements OnInit {
   ngOnInit() {
     this.schedule = this.navParams.data.schedule;
 
-    this.checkIn = moment().toISOString();
-    this.checkOut = moment().toISOString();
+    this.checkIn = moment();
+    this.checkOut = moment();
 
+    console.log(this.schedule);
     //if (this.schedule.effectiveStartTime) {
     //  this.effectiveStartTime = new Date(
     //    this.navParams.data.schedule.effectiveStartTime
@@ -45,13 +46,15 @@ export class TimeTableModalPage implements OnInit {
   }
 
   async confirmCheckIn() {
-    this.schedule.checkIn = this.checkIn;
+    this.schedule.checkIn = moment(this.checkIn).format('YYYY-MM-DDTHH:mm');
+    console.log(this.schedule)
     this.schedulesService.update(this.schedule);
     //await this.modalController.dismiss();
   }
   
   async confirmCheckOut() {
-    this.schedule.checkOut = this.checkOut;
+    this.schedule.checkOut = moment(this.checkOut).format('YYYY-MM-DDTHH:mm');;
+    console.log(this.schedule)
     this.schedulesService.update(this.schedule);
     //await this.modalController.dismiss();
   }

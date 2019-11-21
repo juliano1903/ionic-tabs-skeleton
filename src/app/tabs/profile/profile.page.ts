@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { User, AuthProvider } from 'src/app/core/services/auth.types';
+import { Component } from '@angular/core';
+import { User } from 'src/app/core/services/auth.types';
 import { Observable } from 'rxjs';
 import { UsersService } from '../services/users.service';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFireStorage } from '@angular/fire/storage';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
+import { Chooser, ChooserResult } from '@ionic-native/chooser/ngx'
 
 export interface Image {
   id: string;
@@ -28,14 +28,19 @@ export class ProfilePage {
     image: ''
   };
 
+  fileObj: ChooserResult;
+
   loading = false;
+
+  documentName: string;
 
   constructor(
     private authService: AuthService,
     private usersService: UsersService,
     private afs: AngularFirestore,
     private fb: FormBuilder,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private chooser: Chooser
   ) {}
 
   private createForm(): void {
@@ -49,6 +54,14 @@ export class ProfilePage {
       reg: [this.user.reg, [Validators.required, Validators.required]],
       password: [this.user.password, [Validators.required, Validators.required]]
     });
+  }
+
+  PickFile() {
+    this.chooser.getFile('application/pdf').then((value: ChooserResult) => {
+      this.fileObj = value;
+    },(err) => {
+      console.log(JSON.stringify(err));
+    })
   }
 
   ionViewDidEnter(): void {
@@ -108,6 +121,46 @@ export class ProfilePage {
       };
     }
   }
+
+  uploadFile(event, filename) {
+
+    if (this.documentName != undefined) {
+      filename = this.documentName;
+    }
+
+    if (this.documentName == undefined && filename == undefined) {
+      return;
+    }
+
+    this.loading = true;
+    if (event.target.files && event.target.files[0]) {
+      const reader = new FileReader();
+
+      reader.readAsDataURL(event.target.files[0]);
+
+      reader.onload = (e: any) => {
+
+        const fileraw = event.target.files[0];
+        const filePath =
+          '/Documents/' +
+          this.user.id +
+          '/' +
+          filename;
+        const result = this.usersService.saveImageRef(filePath, fileraw);
+        const ref = result.ref;
+        result.task.then(a => {
+          ref.getDownloadURL().subscribe(image => {
+            this.newImage.image = image;
+            this.user.picture = this.newImage.image;
+            this.usersService.update(this.user);
+            this.loading = false;
+          });
+        });
+      };
+    }
+    this.documentName = null;
+  }
+
 
   logout() {
     this.authService.logout();

@@ -35,11 +35,11 @@ export class BalancePage {
     
     this.selectedDate = moment();
 
-    this.dateFilter.push(new Date(date.getFullYear(), date.getDate() - 5 ));
-    this.dateFilter.push(new Date(date.getFullYear(), date.getDate() - 4 ));
-    this.dateFilter.push(new Date(date.getFullYear(), date.getDate() - 3 ));
-    this.dateFilter.push(new Date(date.getFullYear(), date.getDate() - 2 ));
-    this.dateFilter.push(new Date(date.getFullYear(), date.getDate() - 1 ));
+    this.dateFilter.push(new Date(date.getFullYear(), date.getMonth() - 2 ));
+    this.dateFilter.push(new Date(date.getFullYear(), date.getMonth() - 1 ));
+    this.dateFilter.push(new Date(date.getFullYear(), date.getMonth()));
+    this.dateFilter.push(new Date(date.getFullYear(), date.getMonth() + 1 ));
+    this.dateFilter.push(new Date(date.getFullYear(), date.getMonth() + 2 ));
 
     this.schedulesService.getAllByLoggedUser().subscribe(data => {
       this.usersService.getLoggedUser().subscribe(user => {

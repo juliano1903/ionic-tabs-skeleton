@@ -25,7 +25,8 @@
         <h3>{{ item.specialty }}</h3>
         <p>{{ item.startTime | date: 'HH:mm' }} - {{ item.endTime | date: 'HH:mm' }}</p>
       </ion-label>
-      <ion-icon name="done-all" slot="end" color="success" size="large" *ngIf="item.userId"></ion-icon>
+      <ion-icon name="done-all" slot="end" color="success" size="large" *ngIf="item.userId && !item.dismissRequested"></ion-icon>
+      <ion-icon name="remove-circle" slot="end" color="danger" size="large" *ngIf="item.dismissRequested"></ion-icon>
     </ion-item>
   </ion-list>
 </ion-content>

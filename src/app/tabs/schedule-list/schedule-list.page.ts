@@ -44,7 +44,7 @@ export class ScheduleListPage {
     });
   }
 
-  applyFilters(data) {
+  applyFilters(data: Schedule[]) {
     this.schedules$ = data.filter(
       s =>
         (!s.userId ||
@@ -53,8 +53,8 @@ export class ScheduleListPage {
           s.userId === this.authService.currentUserId()) &&
         !s.disabled &&
         this.userHasAutorization(s) &&
-        !this.isEffectived(s)
-
+        !this.isEffectived(s) &&
+        moment(s.startTime).isAfter(moment().startOf('month'))
     );
   }
 
@@ -66,12 +66,22 @@ export class ScheduleListPage {
     );
   }
 
+  scheduleContract(schedule: Schedule): Contract {
+    return (
+      this.contracts.filter(
+        f => f.hospitalId === schedule.hospitalId && f.specialty === schedule.specialty
+      )[0]
+    );
+  }
+
   isEffectived(s: Schedule) {
     return s.effectiveEndTime || s.effectiveStartTime
   }
 
   changeApply(schedule: Schedule) {
-    if (schedule.userId) {
+    if (schedule.dismissRequested) {
+      this.presentAlertCancelDismissConfirmation(schedule);
+    } else if (schedule.userId) {
       this.presentAlertDismissConfirmation(schedule);
     } else {
       this.presentAlertApplyConfirmation(schedule);
@@ -82,11 +92,7 @@ export class ScheduleListPage {
     const alert = await this.overlayService.alert({
       header: 'Dismiss!',
       message:
-        'Confirm dismiss for ' +
-        schedule.hospitalName +
-        '<p>At ' +
-        moment(new Date(schedule.startTime)).format('MM/DD/YYYY HH:mm') +
-        '</p>',
+        'A dismiss request is going to be sent to admin!',
       buttons: [
         {
           text: 'Cancel',
@@ -98,8 +104,32 @@ export class ScheduleListPage {
         {
           text: 'Confirm',
           handler: () => {
-            schedule.userId = null;
-            schedule.userName = null;
+            schedule.dismissRequested = true;
+            this.schedulesService.updateSchedule(schedule);
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  async presentAlertCancelDismissConfirmation(schedule: Schedule) {
+    const alert = await this.overlayService.alert({
+      header: 'Dismiss!',
+      message:
+        'A dismiss request is pending. Do you want to cancel that request?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: blah => {
+          }
+        },
+        {
+          text: 'Confirm',
+          handler: () => {
+            schedule.dismissRequested = false;
             this.schedulesService.updateSchedule(schedule);
           }
         }
@@ -130,6 +160,8 @@ export class ScheduleListPage {
           handler: () => {
             schedule.userId = this.user.id;
             schedule.userName = this.user.name; 
+            schedule.price = this.scheduleContract(schedule).price;
+            console.log(schedule);
             this.schedulesService.updateSchedule(schedule);
           }
         }

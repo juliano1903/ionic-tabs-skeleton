@@ -10,6 +10,7 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireStorageModule } from '@angular/fire/storage';
+import { Chooser } from '@ionic-native/chooser/ngx'
 
 @NgModule({
   imports: [
@@ -23,6 +24,7 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
   providers: [
     StatusBar,
     SplashScreen,
+    Chooser,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ]
 })
