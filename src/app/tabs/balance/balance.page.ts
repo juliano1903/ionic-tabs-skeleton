@@ -20,6 +20,8 @@ export class BalancePage {
   contracts: Contract[];
   dateFilter: Array<Date>;
   selectedDate: moment.Moment;
+  totalPredicted: number = 0;
+  totalReceived: number = 0;
 
   constructor(
     private schedulesService: SchedulesService,
@@ -83,6 +85,11 @@ export class BalancePage {
         }
       });
 
+      this.totalPredicted += contract.predictedValue;
+      this.totalReceived += contract.receivedValue;
+
+      console.log(schedulesContract);
+
       if (contract.schedules) {
         contract.schedules.concat(schedulesContract);
       } else {
@@ -95,6 +102,8 @@ export class BalancePage {
     this.contracts.forEach(contract => {
       contract.schedules = null;
     })
+    this.totalPredicted = 0;
+    this.totalReceived = 0;
     this.applyFilters(this.schedules$);
   }
 
