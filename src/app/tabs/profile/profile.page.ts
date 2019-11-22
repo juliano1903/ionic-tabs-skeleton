@@ -7,6 +7,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { Chooser, ChooserResult } from '@ionic-native/chooser/ngx'
+import * as moment from 'moment';
 
 export interface Image {
   id: string;
@@ -123,6 +124,11 @@ export class ProfilePage {
   }
 
   uploadFile(event, filename) {
+
+    if (filename) {
+      this.user.papUpdatedDate = moment().format('YYYY-MM-DDTHH:mm');;
+      this.usersService.update(this.user)
+    }
 
     if (this.documentName != undefined) {
       filename = this.documentName;

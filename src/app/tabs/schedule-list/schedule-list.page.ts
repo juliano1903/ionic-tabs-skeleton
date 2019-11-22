@@ -75,7 +75,7 @@ export class ScheduleListPage {
   }
 
   isEffectived(s: Schedule) {
-    return s.effectiveEndTime || s.effectiveStartTime
+    return s.checkIn || s.checkOut
   }
 
   changeApply(schedule: Schedule) {

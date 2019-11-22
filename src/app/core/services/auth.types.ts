@@ -20,6 +20,8 @@ export interface User {
   birth: string;
   specialties: Array<string>;
   contracts: any;
+  papExpirationDate: string;
+  papUpdatedDate: string;
 }
 
 export interface AuthOptions {

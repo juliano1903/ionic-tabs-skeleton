@@ -88,8 +88,6 @@ export class BalancePage {
       this.totalPredicted += contract.predictedValue;
       this.totalReceived += contract.receivedValue;
 
-      console.log(schedulesContract);
-
       if (contract.schedules) {
         contract.schedules.concat(schedulesContract);
       } else {
