@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar text-center>
+    <ion-title>Schedule Check-in</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-item *ngIf="!schedule.checkIn">
+    <ion-label> Check-in </ion-label>
+    <ion-label> {{ checkIn | date: 'dd/MM/yyyy HH:MM'  }} </ion-label>
+    <ion-button style="min-width: 90px" (click)="confirmCheckIn()">CHECK-IN</ion-button>
+  </ion-item>
+
+  <ion-item *ngIf="schedule.checkIn">
+    <ion-label > Check-in </ion-label>     
+    <ion-label > {{ schedule.checkIn | date: 'dd/MM/yyyy HH:MM' }} </ion-label>
+    <ion-icon name="done-all" color="success" class="is-icon-no-color"></ion-icon>
+  </ion-item>
+
+  <ion-item *ngIf="!schedule.checkOut">
+    <ion-label> Check-out </ion-label>
+    <ion-label> {{ checkOut | date: 'dd/MM/yyyy HH:MM'  }} </ion-label>
+    <ion-button [disabled]="!schedule.checkIn" style="min-width: 90px" (click)="confirmCheckOut()">CHECK-OUT</ion-button>
+  </ion-item>
+
+  <ion-item *ngIf="schedule.checkOut">
+    <ion-label > Check-out </ion-label>     
+    <ion-label > {{ schedule.checkOut | date: 'dd/MM/yyyy HH:MM' }} </ion-label>
+    <ion-icon name="done-all" color="success" class="is-icon-no-color"></ion-icon>
+  </ion-item>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col text-right>
+        <ion-button color="primary" expand="block" (click)="closeModal()">CLOSE</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

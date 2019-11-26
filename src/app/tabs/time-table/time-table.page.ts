@@ -7,6 +7,8 @@ import { Schedule } from '../models/schedule.model';
 import { Subscription } from 'rxjs';
 import { TimeTableModalPage } from 'src/app/tabs/modals/time-table-modal/time-table-modal.page';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { Router, NavigationExtras } from '@angular/router';
+
 
 @Component({
   selector: 'app-time-table',
@@ -39,7 +41,7 @@ export class TimeTablePage {
     private modalController: ModalController,
     private navCtrl: NavController,
     private authService: AuthService,
-
+    private router: Router
   ) {
     this.schedulesSubscription = schedulesService.getAllByLoggedUser().subscribe(data => {
       this.eventSource = [];
@@ -135,27 +137,23 @@ export class TimeTablePage {
   }
 
   async onEventSelected(event) {
-    const modal = await this.modalController.create({
-      component: TimeTableModalPage,
-      componentProps: {
-        schedule: event.schedule
+    let navigationExtras: NavigationExtras = {
+      state: {
+        schedule: event
       }
-    });
-
-    modal.onDidDismiss().then(dataReturned => {
-      if (dataReturned !== null) {
-        this.dataReturned = dataReturned.data;
-      }
-    });
-
-    return await modal.present();
+    };
+    this.router.navigate(['/checkin'], navigationExtras);
+//    this.navCtrl.navigateForward('/checkin', { event.schedule });
+    //this.navCtrl.navigateForward(['checkin'], event);
   }
 
   onTimeSelected(ev) {
-    const selected = new Date(ev.selectedTime);
-    this.schedule.startTime = selected;
-    selected.setHours(selected.getHours() + 1);
-    this.schedule.endTime = selected;
+    if(this.schedule) {
+      const selected = new Date(ev.selectedTime);
+      this.schedule.startTime = selected;
+      selected.setHours(selected.getHours() + 1);
+      this.schedule.endTime = selected;
+    }
   }
 
   logout() {

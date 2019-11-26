@@ -13,7 +13,8 @@ const routes: Routes = [
   {
     path: 'time-table-modal',
     loadChildren: './tabs/modals/time-table-modal/time-table-modal.module#TimeTableModalPageModule'
-  }
+  },
+  { path: 'checkin', loadChildren: './tabs/checkin/checkin.module#CheckinPageModule' }
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })],
