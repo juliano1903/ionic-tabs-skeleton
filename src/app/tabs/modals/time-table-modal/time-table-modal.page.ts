@@ -21,7 +21,10 @@ export class TimeTableModalPage implements OnInit {
     private modalController: ModalController,
     private navParams: NavParams,
     private schedulesService: SchedulesService
-  ) { }
+  ) {
+    this.effectiveStartTime = new Date();
+    this.effectiveEndTime = new Date();
+   }
 
   ngOnInit() {
     this.schedule = this.navParams.data.schedule;

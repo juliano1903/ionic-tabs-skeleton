@@ -56,6 +56,8 @@ export class BalancePage {
   }
 
   applyFilters(data: Schedule[]) {
+    this.totalPredicted = 0;
+    this.totalReceived = 0;
 
     var nextMonth = moment(this.selectedDate).add(1 ,'M').startOf('month');
     var actualMonth = moment(this.selectedDate).startOf('month');
@@ -71,9 +73,8 @@ export class BalancePage {
 
       schedulesContract.forEach(schedule => {
         if (schedule.checkIn && schedule.checkOut) {
-          const effectiveMinutes = moment
-            .duration(moment(schedule.checkOut).diff(schedule.checkIn))
-            .asHours();
+          const effectiveMinutes = this.getEffectiveMinutes(schedule);
+
           schedule.receivedAmount = (schedule.price ? schedule.price : contract.price) * effectiveMinutes;
           contract.receivedValue += schedule.receivedAmount;
         } else {
@@ -94,6 +95,24 @@ export class BalancePage {
         contract.schedules = schedulesContract;
       }
     });
+  }
+
+  getEffectiveMinutes(schedule) {
+    console.log(moment
+      .duration(moment(schedule.checkOut).diff(schedule.checkIn))
+      .asHours());
+
+    const startDate = moment
+      .duration(moment(schedule.startDate).diff(schedule.checkIn))
+      .asMinutes() > 15 ? schedule.checkIn : schedule.startDate;
+
+    const endDate = moment
+      .duration(moment(schedule.endDate).diff(schedule.checkOut))
+      .asMinutes() > 15 ? schedule.checkOut : schedule.endDate;
+
+    return moment
+    .duration(moment(endDate).diff(startDate))
+    .asHours();
   }
 
   onChange() {

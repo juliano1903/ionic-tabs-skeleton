@@ -139,12 +139,10 @@ export class TimeTablePage {
   async onEventSelected(event) {
     let navigationExtras: NavigationExtras = {
       state: {
-        schedule: event
+        schedule: event.schedule
       }
     };
     this.router.navigate(['/checkin'], navigationExtras);
-//    this.navCtrl.navigateForward('/checkin', { event.schedule });
-    //this.navCtrl.navigateForward(['checkin'], event);
   }
 
   onTimeSelected(ev) {

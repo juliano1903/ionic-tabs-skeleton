@@ -11,12 +11,13 @@ import { Location } from '@angular/common';
   styleUrls: ['./checkin.page.scss'],
 })
 export class CheckinPage implements OnInit {
-  effectiveStartTime: any;
-  effectiveEndTime: any;
+  adjustedStartTime: any;
+  adjustedEndTime: any;
   notes: string;
   schedule: Schedule;
   checkIn: moment.Moment;
   checkOut: moment.Moment;
+  requesForm: boolean = false;
 
   constructor(
     private schedulesService: SchedulesService,
@@ -25,13 +26,15 @@ export class CheckinPage implements OnInit {
   ) { 
     //this.route.queryParams.subscribe(params => {
         this.schedule = this.router.getCurrentNavigation().extras.state.schedule;
-        console.log(this.schedule);
+        console.log('schedule',this.schedule);
     //});
   }
 
   ngOnInit() {
     this.checkIn = moment();
     this.checkOut = moment();
+    this.adjustedStartTime = moment(this.schedule.checkIn).toISOString();
+    this.adjustedEndTime =  moment(this.schedule.checkOut).toISOString();
   }
 
   async confirmCheckIn() {
@@ -41,6 +44,16 @@ export class CheckinPage implements OnInit {
   
   async confirmCheckOut() {
     this.schedule.checkOut = moment(this.checkOut).format('YYYY-MM-DDTHH:mm');;
+    this.schedulesService.update(this.schedule);
+  }
+
+  changeAdjustmentRequestForm() {
+    this.requesForm = !this.requesForm;
+  }
+
+  saveAdjustmentRequest() {
+    this.schedule.adjustedStartTime = moment(this.adjustedStartTime).format('YYYY-MM-DDTHH:mm');;
+    this.schedule.adjustedEndTime = moment(this.adjustedEndTime).format('YYYY-MM-DDTHH:mm');
     this.schedulesService.update(this.schedule);
   }
 

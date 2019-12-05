@@ -3,8 +3,8 @@ export interface Schedule {
   startTime: Date;
   endTime: Date;
   location: string;
-  effectiveEndTime: Date;
-  effectiveStartTime: Date;
+  adjustedEndTime: string;
+  adjustedStartTime: string;
   notes: string;
   userId: string;
   specialty: string;
@@ -18,4 +18,5 @@ export interface Schedule {
   checkOut?: string;
   price?: number;
   dismissRequested?: boolean;
+
 }
