@@ -12,45 +12,44 @@
     <ion-button style="min-width: 90px" (click)="confirmCheckIn()">CHECK-IN</ion-button>
   </ion-item>
 
-  <ion-item *ngIf="schedule.checkIn">
-    <ion-label > Check-in </ion-label>     
+  <ion-item [style.text-decoration] = "schedule.adjustedStartTimeStatus == 'approved' ? 'line-through' : 'none'" (click)="changeAdjustCheckIn()" *ngIf="schedule.checkIn">
+    <ion-label slot="start"> Check-in </ion-label>     
     <ion-label > {{ schedule.checkIn | date: 'dd/MM/yyyy HH:mm' }} </ion-label>
-    <ion-icon name="done-all" color="success" class="is-icon-no-color"></ion-icon>
+    <ion-icon *ngIf="!schedule.adjustedStartTimeStatus" slot="end" name="create"></ion-icon>
+  </ion-item>
+
+  <ion-item [style.text-decoration] = "schedule.adjustedStartTimeStatus == 'rejected' ? 'line-through' : 'none'" *ngIf="enableAdjustCheckIn || schedule.adjustedStartTime">
+    <ion-label slot="start"> Adjusted Check-in </ion-label>
+    <ion-datetime *ngIf="!schedule.adjustedStartTimeStatus" style="padding: 0px;" displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD/MM/YYYY HH:mm" 
+      [(ngModel)]="adjustedStartTime"></ion-datetime>
+    <ion-label *ngIf="schedule.adjustedStartTimeStatus"> {{ schedule.adjustedStartTime | date: 'dd/MM/yyyy HH:mm' }} </ion-label>
+    <ion-icon *ngIf="schedule.adjustedStartTimeStatus == 'approved'" color="success" slot="end" name="done-all"></ion-icon>
+    <ion-icon *ngIf="schedule.adjustedStartTimeStatus == 'rejected'" color="danger" slot="end" name="close-circle-outline"></ion-icon>
   </ion-item>
 
   <ion-item *ngIf="!schedule.checkOut">
-    <ion-label> Check-out </ion-label>
+    <ion-label > Check-out </ion-label>
     <ion-label> {{ checkOut | date: 'dd/MM/yyyy HH:mm'  }} </ion-label>
     <ion-button [disabled]="!schedule.checkIn" style="min-width: 90px" (click)="confirmCheckOut()">CHECK-OUT</ion-button>
   </ion-item>
 
-  <ion-item *ngIf="schedule.checkOut">
-    <ion-label > Check-out </ion-label>     
-    <ion-label > {{ schedule.checkOut | date: 'dd/MM/yyyy HH:mm' }} </ion-label>
-    <ion-icon name="done-all" color="success" class="is-icon-no-color"></ion-icon>
+  <ion-item [style.text-decoration] = "schedule.adjustedEndTimeStatus == 'approved' ? 'line-through' : 'none'" (click)="changeAdjustCheckOut()" *ngIf="schedule.checkOut">
+    <ion-label slot="start"> Check-out </ion-label>     
+    <ion-label> {{ schedule.checkOut | date: 'dd/MM/yyyy HH:mm' }} </ion-label>
+    <ion-icon *ngIf="!schedule.adjustedEndTimeStatus" slot="end" name="create"></ion-icon>
   </ion-item>
 
-  
-  <ion-list *ngIf="requesForm">
-    <ion-item>
-      <ion-label>New Check-in</ion-label>
-      <ion-datetime displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD/MM/YYYY HH:mm" 
-        [(ngModel)]="adjustedStartTime"></ion-datetime>
-    </ion-item>
-    <ion-item>
-      <ion-label>New Check-out</ion-label>
-      <ion-datetime displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD/MM/YYYY HH:mm"
-        [(ngModel)]="adjustedEndTime"></ion-datetime>
-    </ion-item>
-  </ion-list>
+  <ion-item [style.text-decoration] = "schedule.adjustedEndTimeStatus == 'rejected' ? 'line-through' : 'none'" *ngIf="enableAdjustCheckOut || schedule.adjustedEndTime">
+    <ion-label slot="start"> Adjusted Check-out </ion-label>
+    <ion-datetime *ngIf="!schedule.adjustedEndTimeStatus" style="padding: 0px;" displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD/MM/YYYY HH:mm"
+      [(ngModel)]="adjustedEndTime"></ion-datetime>
+    <ion-label *ngIf="schedule.adjustedEndTimeStatus"> {{ schedule.adjustedStartTime | date: 'dd/MM/yyyy HH:mm' }} </ion-label>
+    <ion-icon *ngIf="schedule.adjustedEndTimeStatus == 'approved'" color="success" slot="end" name="done-all"></ion-icon>
+    <ion-icon *ngIf="schedule.adjustedEndTimeStatus == 'rejected'" color="danger" slot="end" name="close-circle-outline"></ion-icon>
+  </ion-item>
 
   <ion-grid>
-    <ion-row *ngIf="!requesForm">
-      <ion-col text-right>
-        <ion-button color="primary" expand="block" (click)="changeAdjustmentRequestForm()">ADJUSTMENT REQUEST</ion-button>
-      </ion-col>
-    </ion-row>
-    <ion-row *ngIf="requesForm">
+    <ion-row *ngIf="enableAdjustCheckIn || enableAdjustCheckOut">
         <ion-col text-right>
           <ion-button color="primary" expand="block" (click)="saveAdjustmentRequest()">SAVE ADJUSTMENT REQUEST</ion-button>
         </ion-col>

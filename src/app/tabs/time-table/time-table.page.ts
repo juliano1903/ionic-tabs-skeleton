@@ -58,8 +58,6 @@ export class TimeTablePage {
       startTime: new Date(),
       endTime: new Date(),
       location: '',
-      effectiveEndTime: new Date(),
-      effectiveStartTime: new Date(),
       notes: 'string',
       userId: null,
       specialty: '',

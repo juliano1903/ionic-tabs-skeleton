@@ -18,6 +18,8 @@ export class CheckinPage implements OnInit {
   checkIn: moment.Moment;
   checkOut: moment.Moment;
   requesForm: boolean = false;
+  enableAdjustCheckIn: boolean = false;
+  enableAdjustCheckOut: boolean = false;
 
   constructor(
     private schedulesService: SchedulesService,
@@ -33,8 +35,19 @@ export class CheckinPage implements OnInit {
   ngOnInit() {
     this.checkIn = moment();
     this.checkOut = moment();
-    this.adjustedStartTime = moment(this.schedule.checkIn).toISOString();
-    this.adjustedEndTime =  moment(this.schedule.checkOut).toISOString();
+    //this.adjustedStartTime = moment(this.schedule.checkIn).toISOString();
+    //this.adjustedEndTime =  moment(this.schedule.checkOut).toISOString();
+    if (this.schedule.adjustedStartTime) {
+      this.adjustedStartTime = moment(this.schedule.adjustedStartTime).toISOString();
+    } else {
+      this.adjustedStartTime = moment(this.schedule.checkIn).toISOString();
+    }
+
+    if (this.schedule.adjustedEndTime) {
+      this.adjustedEndTime =  moment(this.schedule.adjustedEndTime).toISOString();
+    } else {
+      this.adjustedEndTime =  moment(this.schedule.checkOut).toISOString();
+    }
   }
 
   async confirmCheckIn() {
@@ -52,8 +65,16 @@ export class CheckinPage implements OnInit {
   }
 
   saveAdjustmentRequest() {
-    this.schedule.adjustedStartTime = moment(this.adjustedStartTime).format('YYYY-MM-DDTHH:mm');;
-    this.schedule.adjustedEndTime = moment(this.adjustedEndTime).format('YYYY-MM-DDTHH:mm');
+    if (this.enableAdjustCheckIn) {
+      this.schedule.adjustedStartTime = moment(this.adjustedStartTime).format('YYYY-MM-DDTHH:mm');
+      this.schedule.adjustedStartTimeStatus = 'pending';
+    }
+
+    if (this.enableAdjustCheckOut) {
+      this.schedule.adjustedEndTime = moment(this.adjustedEndTime).format('YYYY-MM-DDTHH:mm');
+      this.schedule.adjustedEndTimeStatus = 'pending';
+    }
+
     this.schedulesService.update(this.schedule);
   }
 
@@ -75,5 +96,13 @@ export class CheckinPage implements OnInit {
     } else {
       this.schedule.checkOut = '';
     }
+  }
+
+  changeAdjustCheckIn() {
+    this.enableAdjustCheckIn = !this.enableAdjustCheckIn && !this.schedule.adjustedStartTimeStatus;
+  }
+
+  changeAdjustCheckOut() {
+    this.enableAdjustCheckOut = !this.enableAdjustCheckOut && !this.schedule.adjustedEndTimeStatus
   }
 }

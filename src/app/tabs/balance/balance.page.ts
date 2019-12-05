@@ -97,18 +97,15 @@ export class BalancePage {
     });
   }
 
-  getEffectiveMinutes(schedule) {
-    console.log(moment
-      .duration(moment(schedule.checkOut).diff(schedule.checkIn))
-      .asHours());
+  getEffectiveMinutes(schedule: Schedule) {
 
     const startDate = moment
-      .duration(moment(schedule.startDate).diff(schedule.checkIn))
-      .asMinutes() > 15 ? schedule.checkIn : schedule.startDate;
+      .duration(moment(schedule.startTime).diff(schedule.checkIn))
+      .asMinutes() > 15 ? schedule.checkIn : schedule.startTime;
 
     const endDate = moment
-      .duration(moment(schedule.endDate).diff(schedule.checkOut))
-      .asMinutes() > 15 ? schedule.checkOut : schedule.endDate;
+      .duration(moment(schedule.endTime).diff(schedule.checkOut))
+      .asMinutes() > 15 ? schedule.checkOut : schedule.endTime;
 
     return moment
     .duration(moment(endDate).diff(startDate))

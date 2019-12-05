@@ -63,8 +63,8 @@
           <ion-label align-self-stretch no-margin padding-top>
             <h2>{{ schedule.hospitalName }}</h2>
             <p *ngIf="schedule.receivedAmount">
-              {{ schedule.checkIn | date: 'dd/MM/yyyy HH:mm' }} -
-              {{ schedule.checkOut | date: 'HH:mm' }}
+              {{ schedule.adjustedStartTimeStatus == 'approved' && schedule.adjustedStartTime || schedule.checkIn | date: 'dd/MM/yyyy HH:mm' }} -
+              {{ schedule.adjustedEndTimeStatus == 'approved' && schedule.adjustedEndTime || schedule.checkOut | date: 'HH:mm' }}
             </p>
             <p *ngIf="schedule.predictedAmount">
               {{ schedule.startTime | date: 'dd/MM/yyyy HH:mm' }} - {{ schedule.endTime | date: 'HH:mm' }}
@@ -143,8 +143,8 @@
           <ion-label align-self-stretch no-margin padding-top>
             <h2>{{ schedule.hospitalName }}</h2>
             <p *ngIf="schedule.receivedAmount">
-              {{ schedule.checkIn | date: 'dd/MM/yyyy HH:mm' }} -
-              {{ schedule.checkOut | date: 'HH:mm' }}
+              {{ schedule.adjustedStartTimeStatus == 'approved' && schedule.adjustedStartTime || schedule.checkIn | date: 'dd/MM/yyyy HH:mm' }} -
+              {{ schedule.adjustedEndTimeStatus == 'approved' && schedule.adjustedEndTime || schedule.checkOut | date: 'HH:mm' }}
             </p>
             <p *ngIf="schedule.predictedAmount">
               {{ schedule.startTime | date: 'dd/MM/yyyy HH:mm' }} - {{ schedule.endTime | date: 'HH:mm' }}
