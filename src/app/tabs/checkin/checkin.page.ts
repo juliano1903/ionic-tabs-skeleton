@@ -4,6 +4,7 @@ import { SchedulesService } from '../services/schedules.service';
 import * as moment from 'moment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { OverlayService } from 'src/app/core/services/overlay.service';
 
 @Component({
   selector: 'app-checkin',
@@ -24,7 +25,8 @@ export class CheckinPage implements OnInit {
   constructor(
     private schedulesService: SchedulesService,
     private route: ActivatedRoute, private router: Router,
-    private location: Location
+    private location: Location,
+    private overlayService: OverlayService
   ) { 
     //this.route.queryParams.subscribe(params => {
         this.schedule = this.router.getCurrentNavigation().extras.state.schedule;
@@ -53,29 +55,40 @@ export class CheckinPage implements OnInit {
   async confirmCheckIn() {
     this.schedule.checkIn = moment(this.checkIn).format('YYYY-MM-DDTHH:mm');
     this.schedulesService.update(this.schedule);
+    await this.overlayService.toast({
+      message: "Check-in realized at: " + moment(this.checkIn).format('DD/MM/YYYY HH:mm')
+    });
   }
   
   async confirmCheckOut() {
     this.schedule.checkOut = moment(this.checkOut).format('YYYY-MM-DDTHH:mm');;
     this.schedulesService.update(this.schedule);
+    await this.overlayService.toast({
+      message: "Check-out realized at: " + moment(this.checkOut).format('DD/MM/YYYY HH:mm')
+    });
   }
 
   changeAdjustmentRequestForm() {
     this.requesForm = !this.requesForm;
   }
 
-  saveAdjustmentRequest() {
+  async saveAdjustmentRequest() {
     if (this.enableAdjustCheckIn) {
       this.schedule.adjustedStartTime = moment(this.adjustedStartTime).format('YYYY-MM-DDTHH:mm');
       this.schedule.adjustedStartTimeStatus = 'pending';
+      this.enableAdjustCheckIn = !this.enableAdjustCheckIn;
     }
 
     if (this.enableAdjustCheckOut) {
       this.schedule.adjustedEndTime = moment(this.adjustedEndTime).format('YYYY-MM-DDTHH:mm');
       this.schedule.adjustedEndTimeStatus = 'pending';
+      this.enableAdjustCheckOut = !this.enableAdjustCheckOut;
     }
 
     this.schedulesService.update(this.schedule);
+    await this.overlayService.toast({
+      message: "Your adjustment request was sent to administrator."
+    });
   }
 
   async closeModal() {

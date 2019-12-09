@@ -43,7 +43,10 @@ export class TimeTablePage {
     private authService: AuthService,
     private router: Router
   ) {
-    this.schedulesSubscription = schedulesService.getAllByLoggedUser().subscribe(data => {
+  }
+
+  ionViewDidEnter(): void {
+    this.schedulesSubscription = this.schedulesService.getAllByLoggedUser().subscribe(data => {
       this.eventSource = [];
       data.forEach(item => {
         this.schedule = item;

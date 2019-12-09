@@ -98,16 +98,29 @@ export class BalancePage {
   }
 
   getEffectiveMinutes(schedule: Schedule) {
+    let startDate;
+    let endDate;
+    console.log(schedule)
+    if (schedule.adjustedStartTimeStatus && schedule.adjustedStartTimeStatus == 'approved') {
+      startDate = this.has15MinutesDiference(schedule.startTime, schedule.adjustedStartTime) ? schedule.adjustedStartTime : schedule.startTime;
+    } else {
+      startDate = this.has15MinutesDiference(schedule.checkIn, schedule.startTime) ? schedule.checkIn : schedule.startTime;
+    }
 
-    const startDate = moment
-      .duration(moment(schedule.startTime).diff(schedule.checkIn))
-      .asMinutes() > 15 ? schedule.checkIn : schedule.startTime;
+    if (schedule.adjustedEndTimeStatus && schedule.adjustedEndTimeStatus == 'approved') {
+      endDate = this.has15MinutesDiference(schedule.adjustedEndTime, schedule.endTime) ? schedule.adjustedEndTime : schedule.endTime;
+    } else {
+      endDate = this.has15MinutesDiference(schedule.checkOut, schedule.endTime) ? schedule.checkOut : schedule.endTime;
+    }
 
-    const endDate = moment
-      .duration(moment(schedule.endTime).diff(schedule.checkOut))
-      .asMinutes() > 15 ? schedule.checkOut : schedule.endTime;
+    console.log("endDate", endDate);
+    console.log("startDate", startDate);
 
-    return moment
+    console.log("minutes", moment
+      .duration(moment(endDate).diff(startDate))
+      .asHours());
+
+      return moment
     .duration(moment(endDate).diff(startDate))
     .asHours();
   }
@@ -124,5 +137,13 @@ export class BalancePage {
   logout() {
     this.authService.logout();
     this.navCtrl.navigateForward('/login');
+  }
+
+  has15MinutesDiference(initialDate, adjustedDate) {
+    const diferenceMinutes = moment
+      .duration(moment(initialDate).diff(adjustedDate))
+      .asMinutes();
+      console.log('diferença', diferenceMinutes);
+      return diferenceMinutes > 15 || (diferenceMinutes * -1) > 15;
   }
 }

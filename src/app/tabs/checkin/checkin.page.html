@@ -25,6 +25,7 @@
     <ion-label *ngIf="schedule.adjustedStartTimeStatus"> {{ schedule.adjustedStartTime | date: 'dd/MM/yyyy HH:mm' }} </ion-label>
     <ion-icon *ngIf="schedule.adjustedStartTimeStatus == 'approved'" color="success" slot="end" name="done-all"></ion-icon>
     <ion-icon *ngIf="schedule.adjustedStartTimeStatus == 'rejected'" color="danger" slot="end" name="close-circle-outline"></ion-icon>
+    <ion-icon *ngIf="schedule.adjustedStartTimeStatus == 'pending'" slot="end" name="time"></ion-icon>
   </ion-item>
 
   <ion-item *ngIf="!schedule.checkOut">
@@ -43,9 +44,10 @@
     <ion-label slot="start"> Adjusted Check-out </ion-label>
     <ion-datetime *ngIf="!schedule.adjustedEndTimeStatus" style="padding: 0px;" displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD/MM/YYYY HH:mm"
       [(ngModel)]="adjustedEndTime"></ion-datetime>
-    <ion-label *ngIf="schedule.adjustedEndTimeStatus"> {{ schedule.adjustedStartTime | date: 'dd/MM/yyyy HH:mm' }} </ion-label>
+    <ion-label *ngIf="schedule.adjustedEndTimeStatus"> {{ schedule.adjustedEndTime | date: 'dd/MM/yyyy HH:mm' }} </ion-label>
     <ion-icon *ngIf="schedule.adjustedEndTimeStatus == 'approved'" color="success" slot="end" name="done-all"></ion-icon>
     <ion-icon *ngIf="schedule.adjustedEndTimeStatus == 'rejected'" color="danger" slot="end" name="close-circle-outline"></ion-icon>
+    <ion-icon *ngIf="schedule.adjustedEndTimeStatus == 'pending'" slot="end" name="time"></ion-icon>
   </ion-item>
 
   <ion-grid>
