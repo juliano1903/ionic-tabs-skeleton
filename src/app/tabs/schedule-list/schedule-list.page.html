@@ -10,7 +10,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="!schedules$ || schedules$.length < 1">
+<ion-content *ngIf="schedules$ && schedules$.length < 1">
   <div class="is-empty-state-content">
     <img src="assets/imgs/empty-tasks-1.png"/>
     <h3>Nothing Here...</h3>
@@ -18,7 +18,7 @@
   </div>
 </ion-content>
 
-<ion-content *ngIf="schedules && schedules$.length > 0">
+<ion-content *ngIf="schedules$ && schedules$.length > 0">
   <ion-list>
     <ion-item (click)="changeApply(item)" *ngFor="let item of schedules$">
       <ion-thumbnail slot="start">
