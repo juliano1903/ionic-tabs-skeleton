@@ -13,7 +13,7 @@
   <ion-list padding class="select-fixed">
     <ion-item>
       <ion-label>Month</ion-label>
-      <ion-select [(ngModel)]="selectedDate" (ionChange)="onChange()" [selectedText]="selectedDate | date: 'MMMM'" interface="popover">
+      <ion-select [(ngModel)]="selectedDate" (ionChange)="onChangeFilter()" [selectedText]="selectedDate | date: 'MMMM'" interface="popover">
         <ion-select-option *ngFor="let dt of dateFilter" value="{{dt}}" >{{ dt | date: 'MMMM' }}</ion-select-option>
       </ion-select>
     </ion-item>
@@ -63,8 +63,8 @@
           <ion-label align-self-stretch no-margin padding-top>
             <h2>{{ schedule.hospitalName }}</h2>
             <p *ngIf="schedule.receivedAmount">
-              {{ schedule.adjustedStartTimeStatus == 'approved' && schedule.adjustedStartTime || schedule.checkIn | date: 'dd/MM/yyyy HH:mm' }} -
-              {{ schedule.adjustedEndTimeStatus == 'approved' && schedule.adjustedEndTime || schedule.checkOut | date: 'HH:mm' }}
+              {{ schedule.adjustedCheckinStatus == 'approved' && schedule.adjustedCheckin || schedule.checkIn | date: 'dd/MM/yyyy HH:mm' }} -
+              {{ schedule.adjustedCheckoutStatus == 'approved' && schedule.adjustedCheckout || schedule.checkOut | date: 'HH:mm' }}
             </p>
             <p *ngIf="schedule.predictedAmount">
               {{ schedule.startTime | date: 'dd/MM/yyyy HH:mm' }} - {{ schedule.endTime | date: 'HH:mm' }}
@@ -143,8 +143,8 @@
           <ion-label align-self-stretch no-margin padding-top>
             <h2>{{ schedule.hospitalName }}</h2>
             <p *ngIf="schedule.receivedAmount">
-              {{ schedule.adjustedStartTimeStatus == 'approved' && schedule.adjustedStartTime || schedule.checkIn | date: 'dd/MM/yyyy HH:mm' }} -
-              {{ schedule.adjustedEndTimeStatus == 'approved' && schedule.adjustedEndTime || schedule.checkOut | date: 'HH:mm' }}
+              {{ schedule.adjustedCheckinStatus == 'approved' && schedule.adjustedCheckin || schedule.checkIn | date: 'dd/MM/yyyy HH:mm' }} -
+              {{ schedule.adjustedCheckoutStatus == 'approved' && schedule.adjustedCheckout || schedule.checkOut | date: 'HH:mm' }}
             </p>
             <p *ngIf="schedule.predictedAmount">
               {{ schedule.startTime | date: 'dd/MM/yyyy HH:mm' }} - {{ schedule.endTime | date: 'HH:mm' }}

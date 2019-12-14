@@ -8,6 +8,7 @@ import { Schedule } from '../models/schedule.model';
 import { Contract } from '../models/contract.model';
 import { User } from 'src/app/core/services/auth.types';
 import * as moment from 'moment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-balance',
@@ -28,31 +29,58 @@ export class BalancePage {
     private overlayService: OverlayService,
     private authService: AuthService,
     private usersService: UsersService,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private router: Router,
   ) {}
 
-  ionViewDidEnter(): void {
-    this.dateFilter = new Array();
-    var date = new Date();
-    
-    this.selectedDate = moment();
+  ionViewWillEnter(): void {
 
-    this.dateFilter.push(new Date(date.getFullYear(), date.getMonth() - 2 ));
-    this.dateFilter.push(new Date(date.getFullYear(), date.getMonth() - 1 ));
-    this.dateFilter.push(new Date(date.getFullYear(), date.getMonth()));
-    this.dateFilter.push(new Date(date.getFullYear(), date.getMonth() + 1 ));
-    this.dateFilter.push(new Date(date.getFullYear(), date.getMonth() + 2 ));
+  }
 
-    this.schedulesService.getAllByLoggedUser().subscribe(data => {
-      this.usersService.getLoggedUser().subscribe(user => {
-        this.user = user;
-        this.usersService.getContracts(this.authService.currentUserId()).subscribe(contracts => {
-          this.contracts = contracts;
-          this.schedules$ = data;
-          this.applyFilters(data);
-        });
+  private redirect(logged: boolean) {
+    const urlRedirect = "tabs"
+    if (!logged) {
+      this.overlayService.toast({
+        message: "You aren't logged. Please relogin."
       });
-    });
+      this.router.navigate(['/login'], {
+        queryParams: { urlRedirect }
+      });
+    }
+  }
+
+  async ionViewDidEnter(): Promise<void> {
+     const loading = await this.overlayService.loading();
+     try {
+       this.authService.isAuthenticated.subscribe(
+         logged => this.redirect(logged));
+   
+   
+       this.dateFilter = new Array();
+       var date = new Date();
+       
+       this.selectedDate = moment();
+   
+       this.dateFilter.push(new Date(date.getFullYear(), date.getMonth() - 2 ));
+       this.dateFilter.push(new Date(date.getFullYear(), date.getMonth() - 1 ));
+       this.dateFilter.push(new Date(date.getFullYear(), date.getMonth()));
+       this.dateFilter.push(new Date(date.getFullYear(), date.getMonth() + 1 ));
+       this.dateFilter.push(new Date(date.getFullYear(), date.getMonth() + 2 ));
+   
+       this.schedulesService.getAllByLoggedUser().subscribe(data => {
+         this.usersService.getLoggedUser().subscribe(user => {
+           this.user = user;
+           this.usersService.getContracts(this.authService.currentUserId()).subscribe(contracts => {
+             this.contracts = contracts;
+             this.schedules$ = data;
+             this.applyFilters(data);
+           });
+         });
+         loading.dismiss();
+       });
+    } finally {
+      loading.dismiss();
+    }
   }
 
   applyFilters(data: Schedule[]) {
@@ -100,50 +128,43 @@ export class BalancePage {
   getEffectiveMinutes(schedule: Schedule) {
     let startDate;
     let endDate;
-    console.log(schedule)
-    if (schedule.adjustedStartTimeStatus && schedule.adjustedStartTimeStatus == 'approved') {
-      startDate = this.has15MinutesDiference(schedule.startTime, schedule.adjustedStartTime) ? schedule.adjustedStartTime : schedule.startTime;
+    if (schedule.adjustedCheckinStatus && schedule.adjustedCheckinStatus == 'approved') {
+      startDate = this.has15MinutesDiference(schedule.startTime, schedule.adjustedCheckin) ? schedule.adjustedCheckin : schedule.startTime;
     } else {
       startDate = this.has15MinutesDiference(schedule.checkIn, schedule.startTime) ? schedule.checkIn : schedule.startTime;
     }
 
-    if (schedule.adjustedEndTimeStatus && schedule.adjustedEndTimeStatus == 'approved') {
-      endDate = this.has15MinutesDiference(schedule.adjustedEndTime, schedule.endTime) ? schedule.adjustedEndTime : schedule.endTime;
+    if (schedule.adjustedCheckoutStatus && schedule.adjustedCheckoutStatus == 'approved') {
+      endDate = this.has15MinutesDiference(schedule.adjustedCheckout, schedule.endTime) ? schedule.adjustedCheckout : schedule.endTime;
     } else {
       endDate = this.has15MinutesDiference(schedule.checkOut, schedule.endTime) ? schedule.checkOut : schedule.endTime;
     }
 
-    console.log("endDate", endDate);
-    console.log("startDate", startDate);
-
-    console.log("minutes", moment
-      .duration(moment(endDate).diff(startDate))
-      .asHours());
-
-      return moment
+    return moment
     .duration(moment(endDate).diff(startDate))
     .asHours();
   }
 
-  onChange() {
-    this.contracts.forEach(contract => {
-      contract.schedules = null;
-    })
-    this.totalPredicted = 0;
-    this.totalReceived = 0;
-    this.applyFilters(this.schedules$);
+  onChangeFilter() {
+    if( this.contracts) {
+      this.contracts.forEach(contract => {
+        contract.schedules = null;
+      })
+      this.totalPredicted = 0;
+      this.totalReceived = 0;
+      this.applyFilters(this.schedules$);
+    }
   }
 
   logout() {
     this.authService.logout();
-    this.navCtrl.navigateForward('/login');
+    this.router.navigateByUrl("/login", { skipLocationChange: true });
   }
 
   has15MinutesDiference(initialDate, adjustedDate) {
     const diferenceMinutes = moment
       .duration(moment(initialDate).diff(adjustedDate))
       .asMinutes();
-      console.log('diferença', diferenceMinutes);
       return diferenceMinutes > 15 || (diferenceMinutes * -1) > 15;
   }
 }

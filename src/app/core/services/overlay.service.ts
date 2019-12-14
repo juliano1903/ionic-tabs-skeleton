@@ -24,7 +24,6 @@ export class OverlayService {
       ...options
     });
     await loading.present();
-    loading.dismiss();
     return loading;
   }
 

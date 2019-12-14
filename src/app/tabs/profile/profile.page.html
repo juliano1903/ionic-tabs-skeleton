@@ -10,13 +10,6 @@
   </ion-toolbar>
 </ion-header>
 
-<!--<ion-content>
-<div>
-  <ion-button (click)="PickFile()">Pick File</ion-button>
-</div>
-
-</ion-content>-->
-
 <ion-content *ngIf="user$ | async as user">
   <div margin class="is-profile-picture">
     <img *ngIf="!user.picture && !url" src="assets/imgs/profile.png" />
@@ -71,6 +64,13 @@
       <ion-item>
         <ion-label color="primary" position="stacked">Password</ion-label>
         <ion-input type="password" placeholder="New Password" formControlName="password"></ion-input>
+        <ion-note
+              slot="end"
+              color="danger"
+              *ngIf="password.dirty && password.hasError('minlength')"
+            >
+              Min 6 characters
+        </ion-note>
       </ion-item>
       <ion-item>
         <ion-label color="primary" position="stacked">Upload Documents</ion-label>

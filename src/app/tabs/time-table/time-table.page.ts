@@ -5,9 +5,10 @@ import { formatDate } from '@angular/common';
 import { SchedulesService } from '../services/schedules.service';
 import { Schedule } from '../models/schedule.model';
 import { Subscription } from 'rxjs';
-import { TimeTableModalPage } from 'src/app/tabs/modals/time-table-modal/time-table-modal.page';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { Router, NavigationExtras } from '@angular/router';
+import { OverlayService } from 'src/app/core/services/overlay.service';
+import * as moment from 'moment';
 
 
 @Component({
@@ -39,20 +40,41 @@ export class TimeTablePage {
     @Inject(LOCALE_ID) private locale: string,
     private schedulesService: SchedulesService,
     private modalController: ModalController,
-    private navCtrl: NavController,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private overlayService: OverlayService
   ) {
   }
 
-  ionViewDidEnter(): void {
+  ionViewWillEnter(): void {
+    this.authService.isAuthenticated.subscribe(
+      logged => this.redirect(logged))
+  }
+
+  private redirect(logged: boolean) {
+    const urlRedirect = "tabs"
+    if (!logged) {
+      this.overlayService.toast({
+        message: "You aren't logged. Please relogin."
+      });
+      this.router.navigate(['/login'], {
+        queryParams: { urlRedirect }
+      });
+    }
+  }
+
+  async ionViewDidEnter(): Promise<void> {
+    const loading = await this.overlayService.loading();
+
     this.schedulesSubscription = this.schedulesService.getAllByLoggedUser().subscribe(data => {
       this.eventSource = [];
       data.forEach(item => {
         this.schedule = item;
         this.addEvent();
       });
+      loading.dismiss();
     });
+    this.myCal.loadEvents();    
   }
 
   resetEvent() {
@@ -71,29 +93,19 @@ export class TimeTablePage {
   }
 
   addEvent() {
+    const startTime = new Date(this.schedule.startTime);
+    const endTime = new Date(this.schedule.endTime);
+
     const eventCopy = {
-      title: this.schedule.hospitalName,
-      startTime: new Date(this.schedule.startTime),
-      endTime: new Date(this.schedule.endTime),
+      title: moment(startTime).format('HH:mm') + " - " + moment(endTime).format('HH:mm') + " | " + this.schedule.hospitalName,
+      startTime: startTime,
+      endTime: startTime,
       allDay: false,
       desc: this.schedule.hospitalName,
       schedule: this.schedule
     };
 
-    if (eventCopy.allDay) {
-      const start = eventCopy.startTime;
-      const end = eventCopy.endTime;
-
-      eventCopy.startTime = new Date(
-        Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), start.getUTCDate())
-      );
-      eventCopy.endTime = new Date(
-        Date.UTC(end.getUTCFullYear(), end.getUTCMonth(), end.getUTCDate() + 1)
-      );
-    }
-
     this.eventSource.push(eventCopy);
-    this.myCal.loadEvents();
     this.resetEvent();
   }
 
@@ -157,6 +169,6 @@ export class TimeTablePage {
 
   logout() {
     this.authService.logout();
-    this.navCtrl.navigateForward('/login');
+    this.router.navigateByUrl("/login", { skipLocationChange: true });
   }
 }

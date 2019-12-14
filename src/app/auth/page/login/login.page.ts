@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 
 import { AuthService } from 'src/app/core/services/auth.service';
 import { AuthProvider } from 'src/app/core/services/auth.types';
 import { OverlayService } from 'src/app/core/services/overlay.service';
 import { UsersService } from 'src/app/tabs/services/users.service';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -29,11 +30,23 @@ export class LoginPage implements OnInit {
     private fb: FormBuilder,
     private navCtrl: NavController,
     private route: ActivatedRoute,
-    private overlayService: OverlayService
+    private overlayService: OverlayService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.createForm();
+  }
+  
+  ionViewWillEnter(): void {
+      this.authService.isAuthenticated.subscribe(
+        logged => this.redirect(logged))
+  }
+
+  private redirect(logged: boolean) {
+    if (logged) {
+      this.router.navigateByUrl("/tabs", { skipLocationChange: false });
+    }
   }
 
   private createForm(): void {

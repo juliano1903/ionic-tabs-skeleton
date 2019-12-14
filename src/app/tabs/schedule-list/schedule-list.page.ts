@@ -9,6 +9,7 @@ import { UsersService } from '../services/users.service';
 import { User } from 'src/app/core/services/auth.types';
 import { Contract } from '../models/contract.model';
 import { NavController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-schedule-list',
@@ -25,10 +26,31 @@ export class ScheduleListPage {
     private overlayService: OverlayService,
     private authService: AuthService,
     private usersService: UsersService,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private router: Router,
   ) { }
 
-  ionViewDidEnter(): void {
+  ionViewWillEnter(): void {
+    this.authService.isAuthenticated.subscribe(
+      logged => this.redirect(logged))
+  }
+
+  private redirect(logged: boolean) {
+    const urlRedirect = "tabs"
+    if (!logged) {
+      this.overlayService.toast({
+        message: "You aren't logged. Please relogin."
+      });
+      this.router.navigate(['/login'], {
+        queryParams: { urlRedirect }
+      });
+    }
+  }
+
+  async ionViewDidEnter(): Promise<void> {
+
+    const loading = await this.overlayService.loading();
+
     this.schedulesService.getAll().subscribe(data => {
       this.usersService.getLoggedUser().subscribe(user => {
         this.user = user;
@@ -39,6 +61,7 @@ export class ScheduleListPage {
           this.schedules$.sort((a, b) => {
             return new Date(a.startTime).getTime() - new Date(b.startTime).getTime();
           });
+          loading.dismiss();
         });
       });
     });
@@ -161,7 +184,6 @@ export class ScheduleListPage {
             schedule.userId = this.user.id;
             schedule.userName = this.user.name; 
             schedule.price = this.scheduleContract(schedule).price;
-            console.log(schedule);
             this.schedulesService.updateSchedule(schedule);
           }
         }
@@ -172,6 +194,6 @@ export class ScheduleListPage {
 
   logout() {
     this.authService.logout();
-    this.navCtrl.navigateForward('/login');
+    this.router.navigateByUrl("/login", { skipLocationChange: true });
   }
 }

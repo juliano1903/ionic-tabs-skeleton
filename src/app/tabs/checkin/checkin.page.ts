@@ -12,8 +12,8 @@ import { OverlayService } from 'src/app/core/services/overlay.service';
   styleUrls: ['./checkin.page.scss'],
 })
 export class CheckinPage implements OnInit {
-  adjustedStartTime: any;
-  adjustedEndTime: any;
+  adjustedCheckin: any;
+  adjustedCheckout: any;
   notes: string;
   schedule: Schedule;
   checkIn: moment.Moment;
@@ -28,27 +28,24 @@ export class CheckinPage implements OnInit {
     private location: Location,
     private overlayService: OverlayService
   ) { 
-    //this.route.queryParams.subscribe(params => {
-        this.schedule = this.router.getCurrentNavigation().extras.state.schedule;
-        console.log('schedule',this.schedule);
-    //});
+      this.schedule = this.router.getCurrentNavigation().extras.state.schedule;
+      this.enableAdjustCheckIn = this.schedule.adjustedCheckinStatus == 'pending';
+      this.enableAdjustCheckOut = this.schedule.adjustedCheckoutStatus == 'pending';
   }
 
   ngOnInit() {
     this.checkIn = moment();
     this.checkOut = moment();
-    //this.adjustedStartTime = moment(this.schedule.checkIn).toISOString();
-    //this.adjustedEndTime =  moment(this.schedule.checkOut).toISOString();
-    if (this.schedule.adjustedStartTime) {
-      this.adjustedStartTime = moment(this.schedule.adjustedStartTime).toISOString();
+    if (this.schedule.adjustedCheckin) {
+      this.adjustedCheckin = moment(this.schedule.adjustedCheckin).toISOString();
     } else {
-      this.adjustedStartTime = moment(this.schedule.checkIn).toISOString();
+      this.adjustedCheckin = moment(this.schedule.checkIn).toISOString();
     }
 
-    if (this.schedule.adjustedEndTime) {
-      this.adjustedEndTime =  moment(this.schedule.adjustedEndTime).toISOString();
+    if (this.schedule.adjustedCheckout) {
+      this.adjustedCheckout =  moment(this.schedule.adjustedCheckout).toISOString();
     } else {
-      this.adjustedEndTime =  moment(this.schedule.checkOut).toISOString();
+      this.adjustedCheckout =  moment(this.schedule.checkOut).toISOString();
     }
   }
 
@@ -74,15 +71,13 @@ export class CheckinPage implements OnInit {
 
   async saveAdjustmentRequest() {
     if (this.enableAdjustCheckIn) {
-      this.schedule.adjustedStartTime = moment(this.adjustedStartTime).format('YYYY-MM-DDTHH:mm');
-      this.schedule.adjustedStartTimeStatus = 'pending';
-      this.enableAdjustCheckIn = !this.enableAdjustCheckIn;
+      this.schedule.adjustedCheckin = moment(this.adjustedCheckin).format('YYYY-MM-DDTHH:mm');
+      this.schedule.adjustedCheckinStatus = 'pending';
     }
 
     if (this.enableAdjustCheckOut) {
-      this.schedule.adjustedEndTime = moment(this.adjustedEndTime).format('YYYY-MM-DDTHH:mm');
-      this.schedule.adjustedEndTimeStatus = 'pending';
-      this.enableAdjustCheckOut = !this.enableAdjustCheckOut;
+      this.schedule.adjustedCheckout = moment(this.adjustedCheckout).format('YYYY-MM-DDTHH:mm');
+      this.schedule.adjustedCheckoutStatus = 'pending';
     }
 
     this.schedulesService.update(this.schedule);
@@ -112,10 +107,14 @@ export class CheckinPage implements OnInit {
   }
 
   changeAdjustCheckIn() {
-    this.enableAdjustCheckIn = !this.enableAdjustCheckIn && !this.schedule.adjustedStartTimeStatus;
+    this.enableAdjustCheckIn = !this.enableAdjustCheckIn && !this.schedule.adjustedCheckinStatus && this.isBefore24Hours(this.schedule.checkIn);
   }
 
   changeAdjustCheckOut() {
-    this.enableAdjustCheckOut = !this.enableAdjustCheckOut && !this.schedule.adjustedEndTimeStatus
+    this.enableAdjustCheckOut = !this.enableAdjustCheckOut && !this.schedule.adjustedCheckoutStatus && this.isBefore24Hours(this.schedule.checkOut);
+  }
+
+  isBefore24Hours(date: string) {
+    return moment.duration(moment(new Date()).diff(date)).asHours() < 24; 
   }
 }

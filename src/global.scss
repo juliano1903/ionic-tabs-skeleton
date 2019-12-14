@@ -25,3 +25,11 @@
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
 @import 'theme/essential/theme.scss';
+
+.monthview-eventdetail-timecolumn {
+    display: none !important;
+}
+
+.event-detail {
+    margin-left: -3px !important;
+}
