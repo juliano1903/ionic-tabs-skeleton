@@ -10,7 +10,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-list padding class="select-fixed">
+  <ion-list style="margin-bottom: 0px;" padding class="select-fixed">
     <ion-item>
       <ion-label>Month</ion-label>
       <ion-select [(ngModel)]="selectedDate" (ionChange)="onChangeFilter()" [selectedText]="selectedDate | date: 'MMMM'" interface="popover">
@@ -18,10 +18,10 @@
       </ion-select>
     </ion-item>
   </ion-list>
-  <ion-slides style="height: 89%;" pager="true" class="is-slider-page">
+  <ion-slides style="height: 92%;" pager="true" class="is-slider-page">
     <ion-slide justify-content-start>
       <ion-card style="width: 92.5%;">
-        <ion-grid style="max-height: 107px; min-width: 384px;" class="is-grid is-grid-tiles">
+        <ion-grid style="max-height: 107px;" class="is-grid is-grid-tiles">
           <ion-row>
             <ion-col size="5">
               <h3>
@@ -51,7 +51,6 @@
       <ion-list style="overflow-y:auto; width: 92.5%;">
         <ion-item
           *ngFor="let schedule schedules$"
-          style="min-width: 384px;"
           class="is-item-thumb-bordered"
         >
           <ion-thumbnail *ngIf="schedule.receivedAmount" slot="start" class="is-icon-thumbnail">
@@ -67,7 +66,10 @@
               {{ schedule.adjustedCheckoutStatus == 'approved' && schedule.adjustedCheckout || schedule.checkOut | date: 'HH:mm' }}
             </p>
             <p *ngIf="schedule.predictedAmount">
-              {{ schedule.startTime | date: 'dd/MM/yyyy HH:mm' }} - {{ schedule.endTime | date: 'HH:mm' }}
+              {{ schedule.startTime | date: 'dd/MM/yyyy' }}
+            </p>
+            <p *ngIf="schedule.predictedAmount">
+                {{ schedule.startTime | date: 'HH:mm' }} - {{ schedule.endTime | date: 'HH:mm' }}
             </p>
           </ion-label>
           <div slot="end" align-self-start no-margin padding-top>
@@ -84,16 +86,16 @@
       </ion-list>
     </ion-slide>
     <ion-slide justify-content-start *ngFor="let contract of contracts">
-      <ion-card style="width: 92.5%; min-height: 177px;">
+      <ion-card style="width: 92.5%;">
         <ion-card-content no-padding> </ion-card-content>
         <ion-row padding text-start>
-          <ion-col size="8">
+          <ion-col size="7">
             <ion-note>
               {{ contract.name }}
             </ion-note>
             <p no-margin>{{ contract.specialty }}</p>
           </ion-col>
-          <ion-col size="4">
+          <ion-col size="5">
             <ion-note>
               Payment/hour
             </ion-note>
@@ -101,7 +103,7 @@
           </ion-col>
         </ion-row>
 
-        <ion-grid style="max-height: 107px; min-width: 384px;" class="is-grid is-grid-tiles">
+        <ion-grid style="max-height: 107px;" class="is-grid is-grid-tiles">
           <ion-row>
             <ion-col size="5">
               <h3>
@@ -131,7 +133,6 @@
       <ion-list style="overflow-y:auto; width: 92.5%;">
         <ion-item
           *ngFor="let schedule of contract.schedules"
-          style="min-width: 384px;"
           class="is-item-thumb-bordered"
         >
           <ion-thumbnail *ngIf="schedule.receivedAmount" slot="start" class="is-icon-thumbnail">
@@ -147,7 +148,10 @@
               {{ schedule.adjustedCheckoutStatus == 'approved' && schedule.adjustedCheckout || schedule.checkOut | date: 'HH:mm' }}
             </p>
             <p *ngIf="schedule.predictedAmount">
-              {{ schedule.startTime | date: 'dd/MM/yyyy HH:mm' }} - {{ schedule.endTime | date: 'HH:mm' }}
+              {{ schedule.startTime | date: 'dd/MM/yyyy' }}
+            </p>
+            <p *ngIf="schedule.predictedAmount">
+                {{ schedule.startTime | date: 'HH:mm' }} - {{ schedule.endTime | date: 'HH:mm' }}
             </p>
           </ion-label>
           <div slot="end" align-self-start no-margin padding-top>
