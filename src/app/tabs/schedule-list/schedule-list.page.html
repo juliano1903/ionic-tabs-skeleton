@@ -1,6 +1,6 @@
-<ion-header>
+<ion-header no-border class="shadow-header">
   <ion-toolbar color="primary">
-    <ion-title>Offers</ion-title>
+    <ion-title>Offerte</ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="logout()">
@@ -13,8 +13,8 @@
 <ion-content *ngIf="schedules$ && schedules$.length < 1">
   <div class="is-empty-state-content">
     <img src="assets/imgs/empty-tasks-1.png"/>
-    <h3>Nothing Here...</h3>
-    <p>You doesn't have offers yet</p>
+    <h3>Niente qui...</h3>
+    <p>Non hai ancora offerte</p>
   </div>
 </ion-content>
 
@@ -22,7 +22,7 @@
   <ion-list>
     <ion-item (click)="changeApply(item)" *ngFor="let item of schedules$">
       <ion-thumbnail slot="start">
-        <ion-text color="primary" class="ion-text-center">
+        <ion-text color="primary" class="ion-text-center ion-text-capitalize">
           <div>{{ item.startTime | date: 'MMM' }}</div>
           <div>{{ item.startTime | date: 'dd' }}</div>
           <div>{{ item.startTime | date: 'EEE' }}</div>

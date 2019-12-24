@@ -5,6 +5,7 @@
 @import './variables';
 @import './core';
 @import './rubik';
+@import './roboto';
 @import './grid';
 @import './list';
 @import './list-square';
@@ -309,7 +310,8 @@
 
   ion-card {
     border-radius: 5px;
-    box-shadow: none;
+    padding-bottom: 10px;
+    //box-shadow: none;
     border: 1px solid var(--ion-color-is-mute-light);
   }
 
@@ -327,10 +329,12 @@
     background-color: var(--is-ion-popover-ion-backdrop-background);
   }
 
-  ion-header ion-toolbar:first-child {
+  // @DANIEL > SEM BORDAS NO HEADER
+
+  /* ion-header ion-toolbar:first-child {
     --ion-toolbar-border-color: var(--ion-color-is-mute-light);
     --border-width: 0.55px;
-  }
+  } */
 
   ion-toolbar ion-segment-button:not(.segment-button-checked) ion-label {
     color: var(--ion-color-is-mute-dark);

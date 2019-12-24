@@ -30,6 +30,259 @@
     display: none !important;
 }
 
-.event-detail {
-    margin-left: -3px !important;
+
+// Daniel
+
+.pt-19 {
+  padding-top: 19px;
 }
+
+.label-floating.sc-ion-label-md-h, .label-stacked.sc-ion-label-md-h {
+  margin-bottom: 5px !important;
+}
+
+.sc-ion-select-popover-md {
+  text-transform: capitalize !important;
+}
+
+ion-card-header {
+  font-weight: 700;
+}
+
+.row-check {
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.monthview-container {
+  height: calc(100% - 56px) !important;
+}
+
+ion-slide .swiper-slide {
+    border-bottom: 1px solid #ececec;
+    box-shadow: 0px 6px 9px rgba(0,0,0,0.1);
+    margin-bottom: 8px;
+}
+
+.event-detail-container{
+    border-top: none !important;
+}
+
+table thead tr th small {
+  font-weight: normal;
+  text-transform: uppercase;
+}
+
+.day-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 30px;
+  line-height: 2.4;
+  font-size: 12px;
+  margin: auto;
+}
+
+td.monthview-primary-with-event.monthview-selected .day-circle, .monthview-selected .day-circle {
+    background-color: #009900 !important;
+    box-shadow: 0px 1px 8px -2px rgba(0, 0, 0, 0.6);
+    -moz-box-shadow: 0px 1px 8px -2px rgba(0, 0, 0, 0.6);
+    -webkit-box-shadow: 0px 1px 8px -2px rgba(0, 0, 0, 0.6);
+    -o-box-shadow: 0px 1px 8px -2px rgba(0, 0, 0, 0.6);
+}
+
+td.monthview-primary-with-event .day-circle {
+    background-color: #3a87ad !important;
+}
+
+.monthview-datetable, .monthview-datetable td, .monthview-datetable th {
+    background-color: white !important;
+    border: none !important;
+}
+
+.monthview-datetable {
+    width: 95% !important;
+}
+
+td:not(.monthview-primary-with-event):not(.monthview-selected) .day-circle {
+    color: grey;
+}
+
+td.monthview-current:not(.monthview-selected) .day-circle {
+    background-color: #f0f0f0 !important;    
+    font-weight: 500;
+    color: grey;
+}
+
+td.text-muted .day-circle {
+    color: #cccccc !important;
+}
+
+.title-calendar {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 18px !important;
+}
+
+.shadow-header {
+    box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.18);
+    z-index: 99999;
+}
+
+.sc-ion-buttons-ios-s ion-icon[slot=icon-only] {
+    font-size: 25px;
+}
+
+.sexy-line { 
+  height: 1px;
+  width: 85%;
+  background: -webkit-gradient(linear, 0 0, 100% 0, from(white), to(white), color-stop(50%, #eeeded));
+}
+
+.sexy-line.mb10 {
+  margin-bottom: 10px;
+}
+
+.button-today {
+  font-size: 13px !important;  
+}
+
+//Text
+$base__font-size: 16px;
+
+$font-family--montserrat: 'Roboto', sans-serif;
+$font-family--primary : $font-family--montserrat;
+
+//Colors
+$white: #fff;
+$black: #222741;
+$gray: #99A4AE;
+$blue: #66DCEC;
+$yellow: #FDCA40;
+$green: #009900;
+
+//Color Palette
+$palettes: (
+  gray-shades: (
+    darker: #9FAAB7,
+    base: #99A4AE,
+    light: #DCDCE3,
+    lighter: #BEC1CA,
+    lightest: #F2F6F8
+  )
+);
+
+// Color usages
+$main-background-color: #F8FAFA;
+$calendar-item-border: #FEFEFE;
+$calendar-item-text: #424588;
+$calendar-button-color: #E9E8E8;
+
+//Font size variables
+$lg-font-size: 20px;
+$default-font-size: 14px;
+$sm-font-size: 12px;
+$xsm-font-size: 10px;
+
+//Font weight variables
+$font-weight--bold: 700;
+$font-weight--semi-bold: 600;
+$font-weight--regular: 400;
+
+//Color Usage
+$primary-color: $green;
+
+@function palette($palette, $shade: base){
+  @return map-get(map-get($palettes, $palette), $shade);
+}
+
+@mixin e($element){
+  &__#{$element}{
+    @content;
+  }
+}
+
+// For Modifier
+// $modifier  - Just the modifier name for the parent block or element
+// @usage     - `.Nav {@include e(item) {@include m(active) {...}}}`
+@mixin m($modifier){
+  &--#{$modifier}{
+    @content;
+  }
+}
+
+.events-container {
+    padding: 0;
+  }
+
+  .events__list {
+      padding: 0;
+      margin-top: 0;
+      background: #fcfcfc;
+  }
+  
+  .events {
+    @include e(title) {
+      color: palette(gray-shades, lighter);
+      display: inline-block;
+      font-size: $default-font-size;
+      font-weight: $font-weight--semi-bold;
+      margin-bottom: 16px;
+    }
+  
+    @include e(tag) {
+      background: $blue;
+      border: 2px solid $calendar-item-border;
+      -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+      -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+      box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+      border-radius: 20px;
+      color: $white;
+      font-size: $xsm-font-size;
+      font-weight: $font-weight--semi-bold;
+      width: 60px;
+      margin-left: 16px;
+      padding: 5px 2px;
+      text-align: center;
+  
+      @include m(highlighted) {
+        background: $yellow;
+      }
+    }
+  
+    @include e(item) {
+      background: $white;
+      border-left: 8px solid $primary-color !important;
+      border-right: none !important;
+      border-top: none !important;
+      border-bottom: none !important;
+      border-radius: 2px;
+      -moz-box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.05);
+      -webkit-box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.05);
+      box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.05);
+      padding: 10px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px;
+  
+      @include m(left) {
+        width: calc(100% - 76px);
+      }
+    }
+  
+    @include e(name) {
+      font-size: 13px;
+      font-weight: $font-weight--bold;
+      color: $black;
+      display: block;
+      margin-bottom: 6px;
+    }
+  
+    @include e(date) {
+      font-size: $sm-font-size;
+      color: palette(gray-shades, darker);
+      display: inline-block;
+    }
+  }

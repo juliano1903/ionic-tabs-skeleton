@@ -1,14 +1,9 @@
-<ion-header>
+<ion-header no-border class="shadow-header">
   <ion-toolbar color="primary">
-    <ion-title>
-      {{ viewTitle }}
-    </ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="today()">Today</ion-button>
-    </ion-buttons>
+    <ion-title>Orari</ion-title>    
     <ion-buttons slot="end">
       <ion-button (click)="logout()">
-        <ion-icon slot="icon-only" name="log-out"></ion-icon>
+        <ion-icon slot="icon-only" name="md-log-out"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -17,19 +12,57 @@
 <ion-content>
   <ion-row>
     <!-- Move back one screen of the slides -->
-    <ion-col size="6" text-left>
+    <ion-col size="3" text-left>
       <ion-button fill="clear" (click)="back()">
-        <ion-icon name="arrow-back" slot="icon-only"></ion-icon>
+        <ion-icon name="ios-arrow-back" slot="icon-only" color="medium"></ion-icon>
       </ion-button>
     </ion-col>
 
+    <ion-col size="6" class="title-calendar">      
+      <ion-text color="medium" class="ion-text-capitalize">        
+        {{ viewTitle }}       
+      </ion-text>   
+    </ion-col>    
+      
     <!-- Move forward one screen of the slides -->
-    <ion-col size="6" text-right>
+    <ion-col size="3" text-right>
       <ion-button fill="clear" (click)="next()">
-        <ion-icon name="arrow-forward" slot="icon-only"></ion-icon>
+        <ion-icon name="ios-arrow-forward" slot="icon-only" color="medium"></ion-icon>
       </ion-button>
     </ion-col>
   </ion-row>
+
+  <ng-template #templateMonthView let-view="view" let-row="row" let-col="col">
+    <div class="day-circle">
+      {{view.dates[row*7+col].label}}
+    </div>    
+  </ng-template>
+
+  <ng-template #templateEventDetail let-showEventDetail="showEventDetail" let-selectedDate="selectedDate" let-noEventsLabel="noEventsLabel">
+    <ion-row text-center justify-content-center>
+      <div class="sexy-line"></div>
+      <ion-col size="12" class="title-calendar">        
+        <ion-buttons>
+          <ion-button (click)="today()" class="button-today">Seleziona oggi</ion-button>
+        </ion-buttons>        
+      </ion-col>
+      <div class="sexy-line"></div>
+    </ion-row>
+    <div class="events-container">
+      <!-- <span class="events__title">Events on {{ selectedDate.date|date: 'dd/MM/yyyy' }}</span> -->
+      <ion-list class="events__list" has-bouncing="false" *ngIf="showEventDetail" overflow-scroll="false">
+        <ion-item *ngFor="let event of selectedDate?.events" (click)="onEventSelected(event)" class="events__item">
+          <div class="events__item--left">
+            <span class="events__name">{{event.title}}</span>
+            <span class="events__date">{{event.startTime|date: 'HH:mm'}} - {{event.endTimeReal|date: 'HH:mm'}}</span>
+          </div>        
+        </ion-item>
+        <ion-item *ngIf="selectedDate?.events.length==0" class="events__item">
+          <div class="no-events-label">{{noEventsLabel}}</div>
+        </ion-item>  
+      </ion-list>
+    </div>    
+  </ng-template>
 
   <calendar
     [eventSource]="eventSource"
@@ -38,10 +71,15 @@
     (onEventSelected)="onEventSelected($event)"
     (onTitleChanged)="onViewTitleChanged($event)"
     (onTimeSelected)="onTimeSelected($event)"
+    [monthviewDisplayEventTemplate]="templateMonthView"
+    [monthviewEventDetailTemplate]="templateEventDetail"
     startHour="0"
     endHour="24"
     step="30"
     startingDayWeek="1"
   >
   </calendar>
+
+  
+
 </ion-content>

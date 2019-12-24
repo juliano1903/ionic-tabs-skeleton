@@ -97,9 +97,10 @@ export class TimeTablePage {
     const endTime = new Date(this.schedule.endTime);
 
     const eventCopy = {
-      title: moment(startTime).format('HH:mm') + " - " + moment(endTime).format('HH:mm') + " | " + this.schedule.hospitalName,
+      title: this.schedule.hospitalName,
       startTime: startTime,
       endTime: startTime,
+      endTimeReal: endTime,
       allDay: false,
       desc: this.schedule.hospitalName,
       schedule: this.schedule

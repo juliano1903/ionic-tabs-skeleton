@@ -5,13 +5,13 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: 'AIzaSyAGUZnNy2H5AsSszWuCLd1Bni_ylIrpLFw',
-    authDomain: 'scheduler-5e722.firebaseapp.com',
-    databaseURL: 'https://scheduler-5e722.firebaseio.com',
-    projectId: 'scheduler-5e722',
-    storageBucket: 'scheduler-5e722.appspot.com',
-    messagingSenderId: '984659202099',
-    appId: '1:984659202099:web:f2744c74f08cda709b5346'
+    apiKey: 'AIzaSyBS-Ln1uvTeCVF1daX2zXgEUKJpI21Vubs',
+    authDomain: 'novamedica-it.firebaseapp.com',
+    databaseURL: 'https://novamedica-it.firebaseio.com',
+    projectId: 'novamedica-it',
+    storageBucket: 'novamedica-it.appspot.com',
+    messagingSenderId: '123345304968',
+    appId: '1:123345304968:web:cd0feff3b20f0c0122ce3d'
   }
 };
 

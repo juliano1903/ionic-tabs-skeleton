@@ -1,6 +1,6 @@
-<ion-header>
+<ion-header no-border class="shadow-header">
   <ion-toolbar color="primary">
-    <ion-title>Balance</ion-title>
+    <ion-title>Rapporto</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="logout()">
         <ion-icon slot="icon-only" name="log-out"></ion-icon>
@@ -11,35 +11,35 @@
 
 <ion-content>
   <ion-list style="margin-bottom: 0px;" padding class="select-fixed">
-    <ion-item>
-      <ion-label>Month</ion-label>
+    <ion-item class="ion-text-capitalize">
+      <ion-label>Mese</ion-label>
       <ion-select [(ngModel)]="selectedDate" (ionChange)="onChangeFilter()" [selectedText]="selectedDate | date: 'MMMM'" interface="popover">
-        <ion-select-option *ngFor="let dt of dateFilter" value="{{dt}}" >{{ dt | date: 'MMMM' }}</ion-select-option>
+        <ion-select-option *ngFor="let dt of dateFilter" value="{{dt}}" class="ion-text-capitalize">{{ dt | date: 'MMMM' }}</ion-select-option>
       </ion-select>
     </ion-item>
   </ion-list>
   <ion-slides style="height: 92%;" pager="true" class="is-slider-page">
     <ion-slide justify-content-start>
-      <ion-card style="width: 92.5%;">
+      <ion-card style="width: 92.5%; margin-top: 0 !important;">
         <ion-grid style="max-height: 107px;" class="is-grid is-grid-tiles">
           <ion-row>
             <ion-col size="5">
               <h3>
-                <span>Predicted Amount</span>
+                <span>Importo Previsto</span>
                 €{{ totalReceived + totalPredicted | number: '1.2-2' }}
               </h3>
             </ion-col>
             <ion-col size="7" no-padding>
               <ion-row>
                 <h3>
-                  Realized<span float-right class="is-color-success">
+                  Realizzato<span float-right class="is-color-success">
                     €{{ totalReceived | number: '1.2-2' }}</span
                   >
                 </h3>
               </ion-row>
               <ion-row>
                 <h3>
-                  Scheduled<span float-right class="is-color-danger"
+                  Programmato<span float-right class="is-color-danger"
                     >€{{ totalPredicted | number: '1.2-2' }}</span
                   >
                 </h3>
@@ -86,7 +86,7 @@
       </ion-list>
     </ion-slide>
     <ion-slide justify-content-start *ngFor="let contract of contracts">
-      <ion-card style="width: 92.5%;">
+      <ion-card style="width: 92.5%; margin-top: 0 !important;">
         <ion-card-content no-padding> </ion-card-content>
         <ion-row padding text-start>
           <ion-col size="7">
@@ -97,7 +97,7 @@
           </ion-col>
           <ion-col size="5">
             <ion-note>
-              Payment/hour
+              Prezzo/ora
             </ion-note>
             <p no-margin>€{{ contract.price }}</p>
           </ion-col>
@@ -107,21 +107,21 @@
           <ion-row>
             <ion-col size="5">
               <h3>
-                <span>Predicted Amount</span>
+                <span>Importo Previsto</span>
                 €{{ contract.receivedValue + contract.predictedValue | number: '1.2-2' }}
               </h3>
             </ion-col>
             <ion-col size="7" no-padding>
               <ion-row>
                 <h3>
-                  Realized<span float-right class="is-color-success">
+                  Realizzato<span float-right class="is-color-success">
                     €{{ contract.receivedValue | number: '1.2-2' }}</span
                   >
                 </h3>
               </ion-row>
               <ion-row>
                 <h3>
-                  Scheduled<span float-right class="is-color-danger"
+                  Programmato<span float-right class="is-color-danger"
                     >€{{ contract.predictedValue | number: '1.2-2' }}</span
                   >
                 </h3>
@@ -154,7 +154,7 @@
                 {{ schedule.startTime | date: 'HH:mm' }} - {{ schedule.endTime | date: 'HH:mm' }}
             </p>
           </ion-label>
-          <div slot="end" align-self-start no-margin padding-top>
+          <div slot="end" align-self-start no-margin class="pt-19">
             <h3 class="is-color-success" *ngIf="schedule.receivedAmount" no-margin>
               €{{ schedule.receivedAmount | number: '1.2-2' }}
             </h3>

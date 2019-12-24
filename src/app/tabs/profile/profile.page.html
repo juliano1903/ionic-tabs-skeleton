@@ -1,6 +1,6 @@
-<ion-header>
+<ion-header no-border class="shadow-header">
   <ion-toolbar color="primary">
-    <ion-title>Profile</ion-title>
+    <ion-title>Profilo</ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="logout()">
@@ -42,39 +42,39 @@
   <form [formGroup]="profileForm" (submit)="onSubmit()">
     <ion-list padding>
       <ion-item>
-        <ion-label color="primary" position="stacked">Phone</ion-label>
-        <ion-input type="text" placeholder="Phone" formControlName="phone"></ion-input>
+        <ion-label color="primary" position="stacked">Telefono</ion-label>
+        <ion-input type="text" placeholder="Numero Telefono" formControlName="phone"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label color="primary" position="stacked">Address</ion-label>
-        <ion-input type="text" placeholder="Address" formControlName="address"></ion-input>
+        <ion-label color="primary" position="stacked">Indirizzo</ion-label>
+        <ion-input type="text" placeholder="Indirizzo" formControlName="address"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label color="primary" position="stacked">City</ion-label>
-        <ion-input type="text" placeholder="City" formControlName="city"></ion-input>
+        <ion-label color="primary" position="stacked">Città</ion-label>
+        <ion-input type="text" placeholder="Città" formControlName="city"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label color="primary" position="stacked">State</ion-label>
-        <ion-input type="text" placeholder="State" formControlName="state"></ion-input>
+        <ion-label color="primary" position="stacked">Stato</ion-label>
+        <ion-input type="text" placeholder="Stato" formControlName="state"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label color="primary" position="stacked">Register</ion-label>
-        <ion-input type="text" placeholder="Register" formControlName="reg"></ion-input>
+        <ion-label color="primary" position="stacked">PAP</ion-label>
+        <ion-input type="text" placeholder="Numero PAP" formControlName="reg"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label color="primary" position="stacked">Password</ion-label>
-        <ion-input type="password" placeholder="New Password" formControlName="password"></ion-input>
+        <ion-input type="password" placeholder="Nuovo Password" formControlName="password"></ion-input>
         <ion-note
               slot="end"
               color="danger"
               *ngIf="password.dirty && password.hasError('minlength')"
             >
-              Min 6 characters
+              Minimo 6 caratteri
         </ion-note>
       </ion-item>
       <ion-item>
-        <ion-label color="primary" position="stacked">Upload Documents</ion-label>
-        <ion-input type="text" placeholder="Document Name" [(ngModel)]="documentName"  [ngModelOptions]="{standalone: true}" ></ion-input>
+        <ion-label color="primary" position="stacked">Carica documenti</ion-label>
+        <ion-input type="text" placeholder="Nome del Documento" [(ngModel)]="documentName"  [ngModelOptions]="{standalone: true}" ></ion-input>
         <ion-button slot="end" size="medium">
           <label for="inputDocument">
             <ion-icon style="font-size: 2em;" color="white" name="document"></ion-icon>
@@ -89,7 +89,7 @@
       </ion-button>
       </ion-item>
       <ion-item>
-        <ion-text class="ion-text-center">
+        <ion-text>
             Polizza Assicurativa Professionale
         </ion-text>
         <ion-button slot="end" size="medium">
@@ -108,7 +108,7 @@
     </ion-list>
 
     <ion-button expand="block" type="submit" [disabled]="profileForm.invalid">
-      Save
+      Salva
     </ion-button>
   </form>
 </ion-content>
