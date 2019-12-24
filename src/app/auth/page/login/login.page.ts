@@ -40,44 +40,64 @@ export class LoginPage implements OnInit {
 
   ngOnInit(): void {
 
-    const prompt = document.querySelector('.prompt') as HTMLElement;
-    const installButton = prompt.querySelector('.prompt__install') as HTMLElement;
-    //const closeButton = prompt.querySelector('.prompt__close') as HTMLElement;
-    let installEvent: any;
+      // Detects if device is in standalone mode
 
-    window.addEventListener('beforeinstallprompt', (event) => {
-      event.preventDefault();
-      
-      // if no localStorage is set, first time visitor
-      if (!this.getVisited()) {
-        // show the prompt banner
-        prompt.style.display = 'block';
-    
-        // store the event for later use
-        installEvent = event;
-      }
-    });
 
-    installButton.addEventListener('click', () => {
-      // hide the prompt banner
-      prompt.style.display = 'none';
-    
-      // trigger the prompt to show to the user
-      installEvent.prompt();
-    
-      // check what choice the user made
-      installEvent.userChoice.then((choice: { outcome: string; }) => {
-        // if the user declined, we don't want to show the button again
-        // set localStorage to true
-        if (choice.outcome !== 'accepted') {
-          //this.setVisited();
+      // Checks if should display install popup notification:
+      if (this.isIos()) {
+        if (!this.isInStandaloneMode()) {
+          const promptIOS = document.querySelector('.promptIOS') as HTMLElement;
+          promptIOS.style.display = 'block';
         }
+      } else {
+        
+        const prompt = document.querySelector('.prompt') as HTMLElement;
+        const installButton = prompt.querySelector('.prompt__install') as HTMLElement;
+        //const closeButton = prompt.querySelector('.prompt__close') as HTMLElement;
+        let installEvent: any;
     
-        installEvent = null;
-      });
-    });
-
+        window.addEventListener('beforeinstallprompt', (event) => {
+          event.preventDefault();
+          
+          // if no localStorage is set, first time visitor
+          if (!this.getVisited()) {
+            // show the prompt banner
+        
+            // store the event for later use
+            installEvent = event;
+          }
+        });
+            prompt.style.display = 'block';
+    
+        installButton.addEventListener('click', () => {
+          // hide the prompt banner
+          prompt.style.display = 'none';
+        
+          // trigger the prompt to show to the user
+          installEvent.prompt();
+        
+          // check what choice the user made
+          installEvent.userChoice.then((choice: { outcome: string; }) => {
+            // if the user declined, we don't want to show the button again
+            // set localStorage to true
+            if (choice.outcome !== 'accepted') {
+              //this.setVisited();
+            }
+        
+            installEvent = null;
+          });
+        });
+      }
     this.createForm();
+  }
+
+  isIos() {
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    return /iphone|ipad|ipod/.test( userAgent );
+  }
+
+  isInStandaloneMode() {
+    return ('standalone' in window.navigator) && (window.navigator['standalone']);
   }
   
   ionViewWillEnter(): void {
