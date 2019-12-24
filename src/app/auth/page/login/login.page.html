@@ -12,10 +12,10 @@
               <ion-icon name="person" color="primary" slot="start"></ion-icon>
               <ion-input type="text" placeholder="Name" formControlName="name"></ion-input>
               <ion-note slot="end" color="danger" *ngIf="name.dirty && name.hasError('required')">
-                Required
+                Necessario
               </ion-note>
               <ion-note slot="end" color="danger" *ngIf="name.dirty && name.hasError('minlength')">
-                Min 3 characters
+                Minimo 3 Caratteri
               </ion-note>
             </ion-item>
           </ng-container>
@@ -31,10 +31,10 @@
             >
             </ion-input>
             <ion-note slot="end" color="danger" *ngIf="email.dirty && email.hasError('required')">
-              Required
+              Necessario
             </ion-note>
             <ion-note slot="end" color="danger" *ngIf="email.dirty && email.hasError('email')">
-              Invalid email
+              E-mail non valido
             </ion-note>
           </ion-item>
 
@@ -50,14 +50,14 @@
               color="danger"
               *ngIf="password.dirty && password.hasError('required')"
             >
-              Required
+              Necessario
             </ion-note>
             <ion-note
               slot="end"
               color="danger"
               *ngIf="password.dirty && password.hasError('minlength')"
             >
-              Min 6 characters
+              Minimo 6 Caratteri
             </ion-note>
           </ion-item>
 
@@ -84,7 +84,7 @@
   </ion-item>
   <ion-item>
         <ion-button class="prompt__install" slot="end" size="medium" expand="block" type="submit">
-          ADD TO HOME SCREEN
+          Aggiungere alla schermata Home
         </ion-button>
   </ion-item>
 </ion-list>
@@ -95,7 +95,7 @@
       <img src="assets/imgs/logo.png" />
     </ion-text>
   </ion-thumbnail>
-  <p>To install this app tap
+  <p>Per installare questa app
    <img style="max-width: 10%; margin-bottom: -7px;" src="assets/imgs/share-icon.png" />
-  and then Add to homescreen</p>
+   toccare, quindi Aggiungi a schermata Home.</p>
 </div>
