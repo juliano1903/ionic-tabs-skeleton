@@ -21,7 +21,8 @@ registerLocaleData(localeIt);
     AppRoutingModule, 
     TimeTableModalPageModule, 
     IonicModule.forRoot({mode: 'md'}), 
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('combined-sw.js', { enabled: environment.production })
+    //ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
    ],
    providers: [
     { provide: LOCALE_ID, useValue: 'it' }

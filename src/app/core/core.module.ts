@@ -11,6 +11,7 @@ import { environment } from 'src/environments/environment';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { Chooser } from '@ionic-native/chooser/ngx'
+import { AngularFireMessagingModule } from '@angular/fire/messaging';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { Chooser } from '@ionic-native/chooser/ngx'
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
-    AngularFireStorageModule
+    AngularFireStorageModule,
+    AngularFireMessagingModule
   ],
   exports: [BrowserModule, IonicModule],
   providers: [

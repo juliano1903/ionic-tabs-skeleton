@@ -22,7 +22,8 @@ export interface User {
   contracts: any;
   papExpirationDate: string;
   papUpdatedDate: string;
-  papStatus?: string; 
+  papStatus?: string;
+  notificationId?:string; 
 }
 
 export interface AuthOptions {

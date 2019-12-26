@@ -7,6 +7,9 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { AuthProvider } from 'src/app/core/services/auth.types';
 import { OverlayService } from 'src/app/core/services/overlay.service';
 import { UsersService } from 'src/app/tabs/services/users.service';
+import { AngularFireMessaging } from '@angular/fire/messaging';
+import { User } from 'src/app/core/services/auth.types';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -27,6 +30,7 @@ export class LoginPage implements OnInit {
   installButton: any;
   closeButton: any;
   installEvent: any;
+  user: User;
 
   constructor(
     private authService: AuthService,
@@ -35,16 +39,13 @@ export class LoginPage implements OnInit {
     private navCtrl: NavController,
     private route: ActivatedRoute,
     private overlayService: OverlayService,
-    private router: Router
+    private router: Router,
+    private afMessaging: AngularFireMessaging
   ) {  }
 
   ngOnInit(): void {
 
-      // Detects if device is in standalone mode
-
-
-      // Checks if should display install popup notification:
-      if (this.isIos()) {
+    if (this.isIos()) {
         if (!this.isInStandaloneMode()) {
           const promptIOS = document.querySelector('.promptIOS') as HTMLElement;
           promptIOS.style.display = 'block';
@@ -89,6 +90,25 @@ export class LoginPage implements OnInit {
         });
       }
     this.createForm();
+  }
+
+  requestPushNotificationsPermission() {
+    this.afMessaging.requestToken
+      .subscribe(
+        (token) => {
+          localStorage.setItem('notification-token', token);
+          this.usersService.getLoggedUser().subscribe(user => {
+            this.user = user;
+            this.user.notificationId = token;
+            this.usersService.update(this.user);
+            alert('salvou o user');
+          });
+          alert(token);
+        },
+        (error) => {
+          console.error(error);
+        }
+    );
   }
 
   isIos() {
@@ -163,6 +183,8 @@ export class LoginPage implements OnInit {
         this.authForm.value.id = this.authService.currentUserId();
         this.usersService.create(this.authForm.value);
       }
+
+      this.requestPushNotificationsPermission();
 
       this.navCtrl.navigateForward(this.route.snapshot.queryParamMap.get('redirect') || '/tabs');
     } catch (e) {
