@@ -61,11 +61,11 @@ export class BalancePage {
        
        this.selectedDate = moment();
    
+       this.dateFilter.push(new Date(date.getFullYear(), date.getMonth() - 4 ));
+       this.dateFilter.push(new Date(date.getFullYear(), date.getMonth() - 3 ));
        this.dateFilter.push(new Date(date.getFullYear(), date.getMonth() - 2 ));
        this.dateFilter.push(new Date(date.getFullYear(), date.getMonth() - 1 ));
        this.dateFilter.push(new Date(date.getFullYear(), date.getMonth()));
-       this.dateFilter.push(new Date(date.getFullYear(), date.getMonth() + 1 ));
-       this.dateFilter.push(new Date(date.getFullYear(), date.getMonth() + 2 ));
    
        this.schedulesService.getAllByLoggedUser().subscribe(data => {
          this.usersService.getLoggedUser().subscribe(user => {

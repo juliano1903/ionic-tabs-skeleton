@@ -1,15 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Notification } from 'rxjs';
 import { Schedule } from '../models/schedule.model';
 import { SchedulesService } from '../services/schedules.service';
 import { OverlayService } from 'src/app/core/services/overlay.service';
 import * as moment from 'moment';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { UsersService } from '../services/users.service';
+import { NotificationsService } from '../services/notifications.service';
+
 import { User } from 'src/app/core/services/auth.types';
 import { Contract } from '../models/contract.model';
 import { NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { NotificationMessage } from '../models/notificationMessage.model';
 
 @Component({
   selector: 'app-schedule-list',
@@ -28,6 +31,7 @@ export class ScheduleListPage {
     private usersService: UsersService,
     private navCtrl: NavController,
     private router: Router,
+    private notificationsService: NotificationsService 
   ) { }
 
   ionViewWillEnter(): void {
@@ -184,7 +188,13 @@ export class ScheduleListPage {
             schedule.userId = this.user.id;
             schedule.userName = this.user.name; 
             schedule.price = this.scheduleContract(schedule).price;
+
             this.schedulesService.updateSchedule(schedule);
+            //let notification: NotificationMessage;
+            //notification.id = schedule.id;
+            //notification.userNotificationToken = this.user.notificationToken;
+            //notification.notificationDate = schedule.startTime;
+            this.notificationsService.create({id: schedule.id, userNotificationToken: this.user.notificationToken, notificationDate: schedule.startTime });
           }
         }
       ]

@@ -23,7 +23,7 @@ export interface User {
   papExpirationDate: string;
   papUpdatedDate: string;
   papStatus?: string;
-  notificationId?:string; 
+  notificationToken?:string; 
 }
 
 export interface AuthOptions {

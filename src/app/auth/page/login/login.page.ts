@@ -44,14 +44,13 @@ export class LoginPage implements OnInit {
   ) {  }
 
   ngOnInit(): void {
-
-    if (this.isIos()) {
-        if (!this.isInStandaloneMode()) {
-          const promptIOS = document.querySelector('.promptIOS') as HTMLElement;
-          promptIOS.style.display = 'block';
-        }
-      } else {
+    if (!this.isInStandaloneMode()) {
+      if (this.isIos()) {
+        const promptIOS = document.querySelector('.promptIOS') as HTMLElement;
+        promptIOS.style.display = 'block';
         
+      } else {
+
         const prompt = document.querySelector('.prompt') as HTMLElement;
         const installButton = prompt.querySelector('.prompt__install') as HTMLElement;
         //const closeButton = prompt.querySelector('.prompt__close') as HTMLElement;
@@ -88,7 +87,9 @@ export class LoginPage implements OnInit {
             installEvent = null;
           });
         });
-      }
+      }    
+    }
+
     this.createForm();
   }
 
@@ -99,11 +100,9 @@ export class LoginPage implements OnInit {
           localStorage.setItem('notification-token', token);
           this.usersService.getLoggedUser().subscribe(user => {
             this.user = user;
-            this.user.notificationId = token;
+            this.user.notificationToken = token;
             this.usersService.update(this.user);
-            alert('salvou o user');
           });
-          alert(token);
         },
         (error) => {
           console.error(error);
@@ -117,7 +116,7 @@ export class LoginPage implements OnInit {
   }
 
   isInStandaloneMode() {
-    return ('standalone' in window.navigator) && (window.navigator['standalone']);
+    return window.matchMedia('(display-mode: standalone)').matches;
   }
   
   ionViewWillEnter(): void {
