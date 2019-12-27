@@ -122,6 +122,9 @@ export class BalancePage {
       } else {
         contract.schedules = schedulesContract;
       }
+      contract.schedules.sort(function(a,b) {
+        return a.startTime < b.startTime ? -1 : a.startTime > b.startTime ? 1 : 0;
+      });
     });
   }
 

@@ -20,11 +20,11 @@
   </ion-list>
   <ion-slides style="height: 92%;" pager="true" class="is-slider-page">
     <ion-slide justify-content-start>
-      <ion-card style="width: 92.5%; margin-top: 0 !important;">
+      <ion-card style="width: 92.5%; margin-top: 0 !important; overflow: visible;">
         <ion-grid style="max-height: 107px;" class="is-grid is-grid-tiles">
           <ion-row>
             <ion-col size="5">
-              <h3>
+              <h3 style="font-size: 1.3rem;">
                 <span>Importo Previsto</span>
                 €{{ totalReceived + totalPredicted | number: '1.2-2' }}
               </h3>
@@ -86,7 +86,7 @@
       </ion-list>
     </ion-slide>
     <ion-slide justify-content-start *ngFor="let contract of contracts">
-      <ion-card style="width: 92.5%; margin-top: 0 !important;">
+      <ion-card style="width: 92.5%; margin-top: 0 !important; overflow: visible;">
         <ion-card-content no-padding> </ion-card-content>
         <ion-row padding text-start>
           <ion-col size="7">
@@ -106,7 +106,7 @@
         <ion-grid style="max-height: 107px;" class="is-grid is-grid-tiles">
           <ion-row>
             <ion-col size="5">
-              <h3>
+              <h3 style="font-size: 1.3rem;">
                 <span>Importo Previsto</span>
                 €{{ contract.receivedValue + contract.predictedValue | number: '1.2-2' }}
               </h3>
